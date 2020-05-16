@@ -49,3 +49,34 @@ $ sudo rm ./wkhtmltox_0.12.1.3-1~bionic_amd64.deb
 ```
 
 ## Install and Configure Odoo
+We will install Odoo from Github repository inside an isolated [Python virtual environment](https://linuxize.com/post/how-to-create-python-virtual-environments-on-ubuntu-18-04/)
+Before starting with the installation process, **change to user** "odoo12":
+```
+$ sudo su - odoo12
+```
+Starting by cloning the Odoo12 source code from the Odoo Github repository:
+```
+$ git clone https://www.github.com/odoo/odoo --depth 1 --branch 12.0 /opt/odoo12/odoo
+```
+Once the source code is downloaded, create a new PYthon virtual environment for the Odoo 12 installation:
+```
+$ cd /opt/odoo12
+$ python3 -m venv odoo-env
+```
+Next, activate the environment with the following command:
+```
+$ source odoo-venv/bin/activate
+```
+Install all required Python modules with pip3:
+```
+(venv) $ pip3 install wheel
+(venv) $ pip3 install -r odoo/requirements.txt
+```
+Deactivate the environment using the following command:
+```
+(venv) $ deactivate
+```
+Create a new directory for the custom addons:
+```
+$ mkdir /opt/odoo12/odoo-custom-addons
+```
