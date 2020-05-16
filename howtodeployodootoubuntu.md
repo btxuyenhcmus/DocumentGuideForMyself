@@ -80,3 +80,29 @@ Create a new directory for the custom addons:
 ```
 $ mkdir /opt/odoo12/odoo-custom-addons
 ```
+Switch back to your sudo user with `exit`
+```
+$ exit
+```
+Next, edit configuration file:
+```
+$ sudo nano /opt/odoo12/odoo/debian/odoo.conf
+```
+```
+[options]
+; This is the password that allows database operations:
+; admin_passwd = admin
+db_host = False
+db_port = False
+db_user = Odoo12
+db_password = False
+addons_path = /opt/odoo12/odoo/addons,/opt/odoo12/odoo-custom-addons
+```
+> If you run config admin_passwd, Do not forget to change `admin` to something more secure.
+
+## Test the Installation
+```
+$ su - odoo12
+$ odoo/odoo-bin
+```
+![odoo-running](./src/static/odoo-12.jpg)
