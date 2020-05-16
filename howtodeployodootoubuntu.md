@@ -106,3 +106,5 @@ $ su - odoo12
 $ odoo/odoo-bin
 ```
 ![odoo-running](./src/static/odoo-12.jpg)
+
+### You can customize odoo-bin command interface, you can `odoo/odoo-bin --help` to more information paramter. Continue...
