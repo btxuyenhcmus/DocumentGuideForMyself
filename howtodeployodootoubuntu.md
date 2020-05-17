@@ -91,7 +91,7 @@ $ sudo nano /opt/odoo12/odoo/debian/odoo.conf
 ```
 [options]
 ; This is the password that allows database operations:
-; admin_passwd = admin
+admin_passwd = admin
 db_host = False
 db_port = False
 db_user = Odoo12
@@ -103,8 +103,9 @@ addons_path = /opt/odoo12/odoo/addons,/opt/odoo12/odoo-custom-addons
 ## Test the Installation
 ```
 $ su - odoo12
-$ odoo/odoo-bin
+$ odoo/odoo-bin -c odoo/debian/odoo.conf
 ```
 ![odoo-running](./src/static/odoo-12.jpg)
 
 ### You can customize odoo-bin command interface, you can `odoo/odoo-bin --help` to more information paramter. Continue...
+- Note 1: if you want vistor not view and action to list db, you can config paramter `list_db=False`
