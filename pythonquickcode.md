@@ -53,3 +53,62 @@ xuyenxuyenxuyen
 >>> False and 4 or 3
 3
 ```
+9. Chuyển đổi ma trận thành một single list
+```
+>>> a = [[1, 2], [3, 4], [5, 6]]
+>>> import itertools
+>>> list(itertools.chain.from_iterable(a))
+[1, 2, 3, 4, 5, 6]
+```
+10. So sánh kép
+```
+>>> n = 10
+>>> 1 < n <20
+True
+>>> 1 > n <= 9
+False
+```
+11. **Phép gán 1 biến đi kèm với điều kiện**
+```
+def small(a, b, c):
+    return a if a <= b and a <= c else (b if b <= a and b <= c else c)
+>>> small(1, 0, 1)
+1
+```
+12. **Toán từ `_`**
+Toán tử  `_` sẽ trả về kết quả của biển thức cuối cùng được thực hiện
+```
+>>> 2 + 1
+3
+>>> _
+3
+>>> print(_)
+3
+```
+13. Đơn giản hóa điều kiện if
+```
+>>> if m in list:
+....    ...
+>>> if m not in list:
+....    ...
+>>> if any(list):
+....    ...
+```
+14. Enum trong pỵthon
+```
+class Shapes:
+    Circle, Square, Triangle, Quadrangle = range(4)
+>>> print(Shapes.Circle)
+0
+```
+15. **Lambda** function
+Lambda là một anonymous function *(hàm ẩn danh)* nó có thể khai báo, định nghĩa ở bất kỳ đâu và không có khả năng tái sử dụng.
+- Lambda chỉ tổn tại trong phạm vi của biến mà nó được định nghĩa, vì vậy nếu như biến đó vượt ra ngoài phạm vi thif hàm này cũng không còn tác dụng nữa.
+- Lambda thường được dùng để gán vào biến, hay được gán vào hàm, class như một tham số.
+```
+lambda agruments_list: expression
+
+>>> add = lambda a, b: a + b
+# call lambda
+add(3, 4)
+```
