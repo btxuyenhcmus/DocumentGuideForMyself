@@ -112,3 +112,39 @@ lambda agruments_list: expression
 # call lambda
 add(3, 4)
 ```
+16. Tạo nhanh một list
+```
+>>> list = [key for key in range(5)]
+[1, 2, 3, 4, 5]
+>>> list = [1 for key in ranges(5)]
+[1, 1, 1, 1, 1]
+>>> list = [(key * 2 + 1) for key in range(5)]
+[1, 3, 5, 7, 9]
+```
+17. Tìm giá trị lặp lại nhiều nhất trong list
+```
+>>> test = [4, 1, 2, 3, 2, 2, 3, 1, 4, 4, 4]
+>>> max(set(test), key=test.count)
+4
+```
+18. Đếm số lần xuất hiện trong list
+```
+>>> from collections import Counter
+>>> mylist = [1, 1, 2, 3, 4, 5, 3, 2, 3, 4, 2, 1, 2, 3]
+>>> print(Counter(mylist))
+Counter({2: 4, 3: 4, 1: 3, 4: 2, 5: 1})
+```
+19. Enumerate
+```
+>>> for key, value in enumerate(iterable):
+....    print(key, value)
+```
+20. **switch**
+Trong python không có `switch..case` nhưng ta có thể dùng dictionary để giái quyết vấn đề tương tự switch này.
+```
+>>> stdcalc = {'sum': lambda x, y: x + y, 'subtract': lambda x, y: x - y}
+>>> print(stdcalc['sum'](9, 3))
+12
+>>> print(stdcalc['subtract'](9, 3))
+6
+```
