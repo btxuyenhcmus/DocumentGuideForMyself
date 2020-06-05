@@ -55,3 +55,4 @@ tracking.receipt_line_ids = [(0, 0, {
     'product_id': product_id.id,
     'state': 'received
 })]
+```
