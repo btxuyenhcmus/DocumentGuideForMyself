@@ -137,3 +137,6 @@ def _get_currency(self, cr, uid, context=None):
 ```
 12. Để check điều kiện ràng buộc các field trong module như ngày thàng bắt đầu nhỏ hơn ngày tháng kết thúc, nên dùng `constraint()` thay cho `onchange()` để bắt sự kiện.
 13. Kế thừa một view và muốn thay đổi gì đó ở bản gốc thì chũng ta nên dùng `xpath`, với position như `after, before, replace, attributes`.
+14. Differece between **models.Model** and **models.TransientModel**:
+    - `models.Model` dùng cho các model chính và sẽ được lưu trong database mãi mãi đến khi có thao tác xóa dữ liệu trong database.
+    - `models.TransientModel` dùng cho các model tạm thời (Temporary) như tạo cái *wizard* và nó chỉ được lưu trong một thời gian quy định.
