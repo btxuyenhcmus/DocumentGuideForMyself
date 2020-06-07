@@ -56,3 +56,84 @@ tracking.receipt_line_ids = [(0, 0, {
     'state': 'received
 })]
 ```
+6. Tạo User cho từng module
+```
+# Example for location module:
+# Create category inside security folder of location module
+<record id="module_location_category" model="ir.module.category">
+    <field name="name">Location</field>
+</record>
+
+# Create User Group
+<record id="group_location_user" model="ir.groups">
+    <field name="name">User</field>
+    <field name="category_id" ref="module_location_category"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+</record>
+
+# Create Manager Group
+<record id="group_location_manager" model="ir.groups">
+    <field name="name">Manager</field>
+    <field name="category_id" ref="module_location_category"/>
+    <field name="implied_ids" eval="[(4, ref('group_location_user'))]"/>
+    <field name="users" eval=[(4, ref('base.user_root')),
+                              (4, ref('base.user_admin'))]/>
+</record>
+```
+> Define header of csv
+**id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink**
+7. dict vals in *create* and *write*
+Nếu muốn xét xem field nào đó có giá trị được cung cấp hay không ta cần kiểm tra đầu vào có nó hay không trước khi thực hiện **TODO**
+```
+# Example
+def write(self, vals):
+    if not vals.get('lat') and not vals.get('long'):
+        return super(Location, self).write(vals)
+```
+Nghĩa là nếu như khi một location được update nhưng không có thông tin update của tọa độ lat long thì không thực hiện những thao tác tiếp theo với tọa độ.
+**Note:**
+    - Hàm super create sẽ trả về  True/False nếu việc tạo dữ liệu thành công/không thành công. Hàm super write sẽ trả về record sau khi đã update.
+    - Khi thực hiện việc update thông tin của dữ liệu nếu chỉ update một field đơn lẻ thì có thể dùng `write` hay việc gán bình thường. *Nhưng* khi thay đổi thông tin của nhiều field cùng một lúc thì nên dùng `write` vì khi dùng phép gán nhiều lần thì nó sẽ gọi hàm write nhiều lần.
+8. **googlemap**
+```
+import googlemaps
+
+def get_google_map_key_api(self):
+    return self.env['ir.config_parameter'].sudo().get_param('google.api_key_geocode')
+
+def get_distance_from_google(self, start, end):
+    api_key = self.get_google_map_key_api()
+
+    gmaps = googlemaps.Client(key=api_key)
+
+    origins = (start['lat'], start['long']) if type(start) is dict else (start.lat, state.long)
+    destinations = (end['lat'], end['long']) if type(end) is dict else (end.lat, end.long)
+
+    try:
+        result = gmaps.distance_matrix(origins=origins, destinations=destinations)
+    except Exception as e:
+        # TODO
+```
+9. Sự khác biệt giữa `=`, `like`, `ilike`, `=like`, `=ilike`
+    - **=**: 2 chuỗi hoàn toàn giống nhau.
+    - **like**: chuỗi bên trái nằm bên trong chuỗi bên phải không phân biệt hoa thường.
+    - **=like**: chuỗi bên trái bằng chuỗi bên phải *không* phân biệt hoa thường.
+    - **ilike**: chuỗi bên trái nằm bên trong chuỗi bên phải *có* phân biệt hoa thường.
+    - **=ilike**: chuỗi bên trái bằng chuỗi bên phải *có* phân biệt hoa thường.
+10. Doing with **context**:
+    - get context with current woking `self.env.context.get('fields', False)` - Nghĩa là nó sẽ lấy giá trị của fields, nêu không có thì sẽ trả về *False*.
+    - Thực hiện một action với context chỉ định `self.env.ref('module.actions).with_context({'fields': value}).action(self)`.
+11. Lấy đơn vị tiền tệ cho từng company
+```
+def _get_currency(self, cr, uid, context=None):
+    user_obj = self.pool.get('res.users')
+    currency_obj = self.pool.get('res.currency')
+    user = user_obj.browse(cr, uid, uid, context=context)
+
+    if user.company_id:
+        return user.company_id.currency_id.id
+    else:
+        return currency_obj.search(cr, uid, [('rate', '=', 1.0)])[0]
+```
+12. Để check điều kiện ràng buộc các field trong module như ngày thàng bắt đầu nhỏ hơn ngày tháng kết thúc, nên dùng `constraint()` thay cho `onchange()` để bắt sự kiện.
+13. Kế thừa một view và muốn thay đổi gì đó ở bản gốc thì chũng ta nên dùng `xpath`, với position như `after, before, replace, attributes`.
