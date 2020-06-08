@@ -1,6 +1,6 @@
 # This tutorial will help you access virtual instance on any server with ssh, server-cli
 
-# Fist, We are learning with popular server that is **Google**
+# First, We are learning with popular server that is **Google**
 ## Use **ssh** to access instance
 1. Follow the steps below in order to add your public SSH key:
 - Prepare an SSH key pair for use. To generate a new SSH key pair, you can use PuTTYgen (Window) or the `ssh-keygen` command (linux and macos).
@@ -21,3 +21,19 @@ You can type name of keygen that you want or default is `id-rsa`.
 ```
 $ ssh user@hostname
 ```
+
+# Second, We are learning with digital ocean server
+## Use **ssh** to access instance
+1. Follow the steps below in order to add your public SSH ey:
+- Prepare an SSH key pair for use. To generate a new SSH key pair, you can use PuTTYgen (Window) or the `ssh-keygen` command (linux and macos).
+```
+$ ssh-keygen
+```
+![ssh-keygen](./src/static/ssh-keygen-command.png)
+You can type name of keygen that you want or default is `id-rsa`.
+- Log in to the [DigitalOcean](https://cloud.digitalocean.com) and select your project.
+![cloud-digitalocean](./src/static/cloud-digitalocean.png)
+- Navigate to the **settings** -> **security** page.
+- Click the **Add SSH key** in the top right tab *security*.
+![security](./src/static/digitalocean-sshkey.png)
+![add-sshkey](./src/static/digital-add-sshkey.png)
