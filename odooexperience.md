@@ -123,6 +123,7 @@ def get_distance_from_google(self, start, end):
 10. Doing with **context**:
     - get context with current woking `self.env.context.get('fields', False)` - Nghĩa là nó sẽ lấy giá trị của fields, nêu không có thì sẽ trả về *False*.
     - Thực hiện một action với context chỉ định `self.env.ref('module.actions).with_context({'fields': value}).action(self)`.
+    - Gán biến context `ctx = dict(self._context) or {}`, nghĩa là lấy ra thông tin về context nếu không có thì trả về một dictionary rỗng.
 11. Lấy đơn vị tiền tệ cho từng company
 ```
 def _get_currency(self, cr, uid, context=None):
@@ -140,3 +141,6 @@ def _get_currency(self, cr, uid, context=None):
 14. Differece between **models.Model** and **models.TransientModel**:
     - `models.Model` dùng cho các model chính và sẽ được lưu trong database mãi mãi đến khi có thao tác xóa dữ liệu trong database.
     - `models.TransientModel` dùng cho các model tạm thời (Temporary) như tạo cái *wizard* và nó chỉ được lưu trong một thời gian quy định.
+15. Thao tác với dữ liệu
+    - `self.env.cr.excute(sql)`
+16. Thao tác với cron
