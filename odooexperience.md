@@ -143,4 +143,41 @@ def _get_currency(self, cr, uid, context=None):
     - `models.TransientModel` dùng cho các model tạm thời (Temporary) như tạo cái *wizard* và nó chỉ được lưu trong một thời gian quy định.
 15. Thao tác với dữ liệu
     - `self.env.cr.excute(sql)`
-16. Thao tác với cron
+16. **Thao tác với cron**
+```
+<record id="availability_create_cron" model="ir.cron">
+    <field name="name">Task DeadLine Reminder</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="state">code</field>
+    <field name="code">model._cron_deadline_reminder()</field>
+    <field name="user_id" ref="base.user_root" />
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field eval="False" name="doall" />
+</record>
+```
+17. **Define __mainifest__ stardard**
+```
+{
+    'name': "Task Deadline Reminder",
+    'version': "12.0.1.0.0",
+    'author': 'Cybrosys Techno Solutions',
+    'company': 'Cybrosys Techno Solutions',
+    'website': 'https://www.cybrosys.com',
+    'summary': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
+    'description': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
+    'category': "Project",
+    'depends': ['project'],
+    'license': 'AGPL-3',
+    'data': [
+            'views/deadline_reminder_view.xml',
+            'views/deadline_reminder_cron.xml',
+            'data/deadline_reminder_action_data.xml'
+             ],
+    'demo': [],
+    'images': ['static/description/banner.jpg'],
+    'installable': True,
+    'auto_install': False
+}
+```
