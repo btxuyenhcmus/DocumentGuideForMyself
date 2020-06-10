@@ -109,3 +109,115 @@ $ odoo/odoo-bin -c odoo/debian/odoo.conf
 
 ### You can customize odoo-bin command interface, you can `odoo/odoo-bin --help` to more information paramter. Continue...
 - Note 1: if you want vistor not view and action to list db, you can config paramter `list_db=False`
+
+## Configure Nginx as SSL Termination Proxy
+Ensure that you have met the following prerequisites before continuing with this section:
+    - Domain name pointing to your public server IP. You can create domain name on [namecheap](https://namecheap.com), in this tutorial we will use `example.com`.
+    - [Nginx Installed](#).
+    - SSL certificate for your domain.
+The default Odoo web server is serving traffic over HTTP. To make our Odoo deployment more secure we will configure Nginx as a SSL termination proxy that will serve the trfiic over HTTPS.
+
+Open your text editor and create the following file (i use vim, here):
+```
+$ sudo vim /etc/nginx/sites-enabled/example.com
+```
+```
+# Odoo servers
+upstream odoo {
+ server 127.0.0.1:8069;
+}
+
+upstream odoochat {
+ server 127.0.0.1:8072;
+}
+
+# HTTP -> HTTPS
+server {
+    listen 80;
+    server_name www.example.com example.com;
+
+    include snippets/letsencrypt.conf;
+    return 301 https://example.com$request_uri;
+}
+
+# WWW -> NON WWW
+server {
+    listen 443 ssl http2;
+    server_name www.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/example.com/chain.pem;
+    include snippets/ssl.conf;
+    include snippets/letsencrypt.conf;
+
+    return 301 https://example.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+
+    proxy_read_timeout 720s;
+    proxy_connect_timeout 720s;
+    proxy_send_timeout 720s;
+
+    # Proxy headers
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    # SSL parameters
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/example.com/chain.pem;
+    include snippets/ssl.conf;
+    include snippets/letsencrypt.conf;
+
+    # log files
+    access_log /var/log/nginx/odoo.access.log;
+    error_log /var/log/nginx/odoo.error.log;
+
+    # Handle longpoll requests
+    location /longpolling {
+        proxy_pass http://odoochat;
+    }
+
+    # Handle / requests
+    location / {
+       proxy_redirect off;
+       proxy_pass http://odoo;
+    }
+
+    # Cache static files
+    location ~* /web/static/ {
+        proxy_cache_valid 200 90m;
+        proxy_buffering on;
+        expires 864000;
+        proxy_pass http://odoo;
+    }
+
+    # Gzip
+    gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;
+    gzip on;
+}
+```
+> Don't forget to replace example.com with your Odoo domain and set the correct path to the SSL certificates files. The snippets used in this configuration are created in [this guide](https://linuxize.com/post/secure-nginx-with-let-s-encrypt-on-ubuntu-18-04/)
+
+Once you are done, restart the Nginx service with:
+```
+$ sudo systemctl restart nginx
+```
+Next, we need to tell Odoo that we will use proxy. To do so, open the configuration file and add the following line:
+```
+proxy_mode = True
+```
+Restart the Odoo service for the changes to take effect:
+```
+$ sudo systemctl restart odoo12
+```
+At this point, your server is configured and you can access your Odoo instance at:
+```
+https://example.com
+```
