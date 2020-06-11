@@ -152,9 +152,9 @@ Trong python không có `switch..case` nhưng ta có thể dùng dictionary đ�
 ```
 21. Cách đọc từ excel cho python
 ```
-from datetime import datetime
-serial = 43111.0
-seconds = (serial - 25569) * 86400
-date = datetime.fromtimestamp(seconds)
-datetime(2018, 1, 11, 0, 0)
+>>> from datetime import datetime
+>>> serial = 43111.0
+>>> seconds = (serial - 25569) * 86400
+>>> date = datetime.fromtimestamp(seconds)
+>>> datetime(2018, 1, 11, 0, 0)
 ```
