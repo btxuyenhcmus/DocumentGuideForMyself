@@ -150,3 +150,11 @@ Trong python không có `switch..case` nhưng ta có thể dùng dictionary đ�
 >>> print(stdcalc['subtract'](9, 3))
 6
 ```
+21. Cách đọc từ excel cho python
+```
+from datetime import datetime
+serial = 43111.0
+seconds = (serial - 25569) * 86400
+date = datetime.fromtimestamp(seconds)
+datetime(2018, 1, 11, 0, 0)
+```
