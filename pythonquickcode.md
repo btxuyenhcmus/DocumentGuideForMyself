@@ -150,7 +150,7 @@ Trong python không có `switch..case` nhưng ta có thể dùng dictionary đ�
 >>> print(stdcalc['subtract'](9, 3))
 6
 ```
-21. Cách đọc dateime từ excel cho python
+21. Cách đọc datetime từ excel cho python
 ```
 >>> from datetime import datetime
 >>> serial = 43111.0
