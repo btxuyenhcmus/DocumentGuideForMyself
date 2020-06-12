@@ -181,3 +181,92 @@ def _get_currency(self, cr, uid, context=None):
     'auto_install': False
 }
 ```
+18. **Create configuration for custom module** display in General Setting
+```
+class CustomModule(models.Model):
+    _name = 'custom.module'
+
+    name = fields.Char(required=True)
+    seats = fields.Integer(string="Number of seats")
+```
+The field *seats* will get default value confiurable in the configuration that we will create.
+Configuration model **res_config_settings.py**
+```
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    default_seats = fields.Interger(default_model='custom.module')
+    my_setting = fields.Char(string="My Setting")
+
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
+        res.update(
+            my_setting = self.env['ir.config_parameter'].sudo().get_param('custom.my_setting')
+        )
+        return res
+    
+    def set_values(self):
+        super(ResConfigSettings, self).set_values()
+        self.env['ir.config_parameter'].sudo().set_param('custom.my_setting', self.my_setting)
+```
+Fields with the prefix `default_` will be handle automatically by Odoo to provide default values for fields in some models. (Nhưng field với tiền tố là `prefix_` sẽ được quản lý tự động bởi Odoo mặt định giá trị cho field ở model tương ứng được khai báo)
+
+Finally there is the view for this model. It is quite a lot code, to match the same style of the other Odoo config pages.
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="custom_setting_view" model="ir.ui.view">
+        <field name="name">Custom Configuration</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')] position="inside">
+                <div class="app_settings_block" data-string="Custom Data-String" string="Custom" data-key="Custom">
+                    <h2>Custom Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="my_setting"/>
+                                <div class="text-muted">
+                                    Description text 1
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="my_setting" class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="default_seats"/>
+                                <div class="text-muted">
+                                    Description text 2
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="default_seats" class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </feild>
+    </record>
+</odoo>
+```
+With the code above, you can access custom configuration in setting menu, To can navigate custom confiuration from custom menu, following code below:
+```
+<record id="custom_settings_action" model="ir.actions.act_window">
+    <field name="name">Custom Configuration</field>
+    <field name="res_model">res.config.settings</field>
+    <field name="view_id" ref="custom_setting_view"/>
+    <field name="view_mode">form</field>
+    <field name="target">inline</field>
+    <field name="context">{'module': 'custom'}</field>
+</record>
+
+<menuitem id="custom_settings_menu" name="Configuration" parent="custom_menu" action="custom_settings_actions"/>
+```
