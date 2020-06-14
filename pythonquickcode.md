@@ -158,4 +158,22 @@ Trong python không có `switch..case` nhưng ta có thể dùng dictionary đ�
 >>> date = datetime.fromtimestamp(seconds)
 >>> datetime(2018, 1, 11, 0, 0)
 ```
+22. **Python map() Function**
+The **map()** function executes a specified function for each item in iterable.
+```
+def myfunc(n):
+    return len(n)
 
+x = map(myfunc, ('apple', 'banana', 'cherry'))
+>>>['5', '6', '6']
+```
+```
+def myfunc(a, b):
+    return a + b
+x = map(myfunc, ('apple', 'banana', 'cherry'), ('orange', 'lemon', 'pineapple'))
+```
+```
+arr = ['12', '21', '121']
+arr = map(str, arr)
+>>> [12, 21, 121]
+```
