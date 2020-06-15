@@ -270,3 +270,9 @@ With the code above, you can access custom configuration in setting menu, To can
 
 <menuitem id="custom_settings_menu" name="Configuration" parent="custom_menu" action="custom_settings_actions"/>
 ```
+19. So sánh số thực
+```
+from odoo.tools.float_utils import float_compare
+
+float_compare(input_val, check_val, pricision) <= 0 or > 0
+```
