@@ -7,3 +7,18 @@ find ~/path/to/folder -type d -exec chmod 777 {} \;
 find ~/path/to/folder -typ f -exec chmod 777 {}\;
 ```
 > `d or f` mean `directory or file` and 777 mean full permistion
+
+# Create venv enviroment for python
+```
+python -m venv name-venv
+```
+Next, activate the environment with the following command:
+```
+source name-venv/bin/activate
+(venv) $ pip3 install flask
+(venv) $ pip3 install django
+```
+To exit environment, input
+```
+deactivate
+```
