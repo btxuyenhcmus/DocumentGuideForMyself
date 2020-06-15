@@ -47,7 +47,10 @@ And I usually delete package file that everything happy.
 ```
 $ sudo rm ./wkhtmltox_0.12.1.3-1~bionic_amd64.deb
 ```
-
+If the above link not found, you can use `pip/pip3` to install packages Wkhtmltopdf
+```
+pip3 install Wkhtmltopdf
+```
 ## Install and Configure Odoo
 We will install Odoo from Github repository inside an isolated [Python virtual environment](https://linuxize.com/post/how-to-create-python-virtual-environments-on-ubuntu-18-04/)
 Before starting with the installation process, **change to user** "odoo12":
