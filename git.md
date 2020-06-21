@@ -30,6 +30,20 @@ Nhưng với Git thì nó có thêm một lựa chọn nữa đó là có thêm 
 
 ![staging_area](./src/static/git-staging-area.png.webp)
 
+## Commit
+*Commit* là một hành động để Git lưu lại một bản chụp (snapshot) của các sự thay đổi trong thư mục làm việc, và các tập tin và thư mục được thay đổi đã phải nằm trong Staging Area. Mỗi lần commit nó sẽ được lưu lại lịch sử chỉnh sửa của mã nguồn kèm theo tên và địa chỉ email của người commit.
+
+Nếu bạn muốn commit một tập tin nào đó, bạn sẽ cần phải đưa tập tin đó vào trạng thái tracked bằng lệnh `git add tên_file`. Trong git có hai loại trạng thái chính đó là Tracked và Untracked, cụ thể:
+- **Tracked** - là tập tin đã được đánh dấu theo dõi trong Git để bạn làm việc với nó. Và trạng thái Tracked nó sẽ có thêm các trạng thái phụ khác là **Unmodified**(chưa chỉnh sửa gì), **Modified**(đã chỉnh sửa) và **Staged**(đã sẵn sàng để commit).
+- **Untracked** - là tập tin còn lại mà bạn sẽ không muốn làm việc với nó trong Git.
+> Nhưng bạn phải bên biến rằng nếu tập tin đó đã được Tracked nhưng đang rơi vào trạng thái (Modified) thì nó vẫn sẽ không thể commit được mà bạn phải đưa nó về Staged cũng bằng lệnh `git add`.
+
+## Bỏ qua Staging Area để commit
+Bạn có thể đưa một tập tin đã được Tracked để commit mà không cần đưa nó vào Staging Area với tham số  `-a` trong lệnh `git commit`. Ví dụ: `git commit -a -m "Skipped Staging Area to commit"`.
+
+## Tìm hiểu thêm về trạng thái
+![git-lifecicle](./src/static/git-lifecycle.webp)
+
 ## How to save username and password in git
 Run
 ```
