@@ -24,7 +24,7 @@ You're probably already wondering if there's an easier way to run the server and
     This configuration tells VS Code to run `"${workspaceFolder}/manage.py"` using the selected Python interpreter and the arguments in the `args` list. Launching the VS Code debugger with this configuration, then, is the same as running `python manage.py runserver` in the VS Code Terminal with your activated virtual environment. (You can add a port number like `"5000"` to `args` if desired.) The `"django": true` entry also tells VS Code to enable debugging of Django page templates, which you see later in this tutorial.
 
 4. Save `launch.json` *(Ctrl+S)*. In the debug configuration drop-down list (which reads **Python: Current File**) select the **Python: Django** configuration:
-    ![vscode-debugger-select](./src/static/vscode-debugger-select.png)
+![vscode-debugger-select](./src/static/vscode-debugger-select.png)
 
 5. Test the configuration by selecting the **Run > Start Debugging** menu command, or selecting the green **Start Debugging** arrow next to the list (*F5*):
 ![vscode-run](./src/static/vscode-run.png)
