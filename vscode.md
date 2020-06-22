@@ -28,7 +28,8 @@ You're probably already wondering if there's an easier way to run the server and
     ![vscode-debugger-select](./src/static/vscode-debugger-select.png)
 
 5. Test the configuration by selecting the **Run > Start Debugging** menu command, or selecting the green **Start Debugging** arrow next to the list (*F5*):
-![vscode-run](./src/static/vscode-run.png)
+
+    ![vscode-run](./src/static/vscode-run.png)
 
 6. **Ctrl+click** the `http://127.0.0.1:8000/` URL in the terminal output window to open the browser and see that the app is running properly.
 
