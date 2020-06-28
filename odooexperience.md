@@ -323,3 +323,22 @@
 - `models.Model` model dài hạn. Bảng trong database được tạo và và lưu trữ cho đến khi có hành động xóa.
 - `models.TransientModel` được dùng trong `wizard`. Dữ liệu chỉ tồn tại trong một thời gian chỉ định.
 - `models.AbstractModel` không có data được lưu trữ. Chúng được dùng để tái sử dụng tính năng.
+
+24. **Many2many** field
+    Ở cấp độ database, mỗi quan hệ nhiều nhiều không tạo ra bất cứ cột nào, thay vào đó nó sẽ tự tạo ra một bản lưu trữ lại mỗi quan hệ giữa các record. Một bảng đặt biệt chỉ có 2 fields ID.
+
+    Mặt định, bảng sẽ có tên được gọp lại 2 bảng với dấu dạch dưới và kết thúc bằng `_rel`.
+
+    Trong một số trường hợp, nếu tên 2 model quá dài dẫn đến bảng rel sẽ vượt ngưỡng 63 kí tự (giới hạn của Postgresql), trong trường hơp này mình nên chỉ định lại tên của bản `rel`.
+
+    Một trường hơp khác là khi cần tạo nhiều quan hệ với cùng một model. Chúng ta cần cung chấp tên cho từng bảng.
+
+    ```
+    # Book <-> Authors relation (using keyword args)
+    author_ids = fields.Many2many(
+        comodel_name='res.partner', # related model (required)
+        relation='library_book_res_partner_rel', # relation table name
+        column1='a_id', # rel table field for "this" record
+        column2='p_id', # rel table field for "other" record
+        string='Authors') # string label text
+    ```
