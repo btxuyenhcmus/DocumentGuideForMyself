@@ -308,3 +308,13 @@
     - View inheritance: [https://www.odoo.com/documentation/12.0/reference/views.html#inheritance](https://www.odoo.com/documentation/12.0/reference/views.html#inheritance)
     - Web Controllers: [https://www.odoo.com/documentation/12.0/reference/http.html#controllers](https://www.odoo.com/documentation/12.0/reference/http.html#controllers)
     - The Odoo official documentation provides additional resources on data files: [https://www.odoo.com/documentation/12.0/reference/data.html#](https://www.odoo.com/documentation/12.0/reference/data.html#)
+22. **Model attributes**
+- `_name` là internal identifier. Là thuộc tính bắt buộc khi tạo mới model.
+- `_description` được hiển thị trong model detail trên giao diện. Nó là tùy chọn nhưng được khuyến khích nêu như bạn không muốn xuất hiện vài dòng `warning` trong `log` của bạn.
+- `_order` dùng để sắp xếp record khi được `browsed` hay hiện trên list view. Nó là một chuỗi được dùng trong SQL `order by clouse`, do đó chúng ta có thể làm bất cứ điều gì hợp lý như các hành vi thông minh hơn, hay là một field many-to-one.
+- `_rec_name` chỉ định ra field dùng để mô tả khi nó được tham chiếu ở field related, ví dụ như quan hệ many-to-one. Mặc định, sẽ dùng field `name`.
+- `_table` là tên của bảng trong database. Thông thường, nó được tự động tạo ra bở ORM với quy ước là tên của model với dấu chấm chuyển thành dấu gạch dưới-underscores.
+- `_log_access=False` có thể chỉ định để chặn việc tự động tạo ra các field tracking: `create_uid, create_date, write_uid, và write_date`.
+- `_auto=False` có thể dùng chỉ định chặn việc tự động tạo bảng trong database. Nếu cần thiết, `init()` nên được viết lại.
+- `inherit`
+- `inherits`
