@@ -276,3 +276,25 @@ from odoo.tools.float_utils import float_compare
 
 float_compare(input_val, check_val, pricision) <= 0 or > 0
 ```
+20. Nhúng model sử dụng **delegation inheritance**
+Delegation inheritance cho phép chúng ta tái sử dụng lại cấu trúc data mà không cần phải nhân bản data đó. *Ví dụ:* mỗi thành viên thư viện đều có thông tin thẻ thư viện, địa chỉ, email và số điện thoại. Mà địa chỉ, email và số điện thoại là cấu trúc của model `res.partner` chúng ta tạo lại sẽ dẫn đến `duplicate` data, nhưng chúng ta cũng không thể dùng tính năng kế thừa được, vì khi kế thừa res.partner sẽ bị ảnh hưởng bởi library member và khi thằng khác sử dụng thì nó dư thừa logic.
+> Chú ý rằng, cách đặt _name khách với parent model cũng không hợp lý trong trường hợp này, vì dùng differane value from parent model thì nó sẽ tạo một bảng mới cà copy toàn bộ data cũng như feature -> không hợp lý.
+
+Solution: using Delegation inheritance
+```
+from odoo import fields, models
+
+
+class Member(models.Model):
+    _name = 'library.member'
+    _description = 'Library Member'
+    card_number = fields.Char()
+    partner_id = fields.Many2one(
+                'res.partner',
+                delegate=True,
+                ondelete='cascade',
+                required=True)
+```
+Như vậy model `library.member` sẽ có các fields của res.partner mà không cần duplicate data vì nhưng thông tin đó được liên kết qua fields partner_id.
+> Và khi chúng ta tạo mới một member thì tương ứng một partner cũng được tạo ra và linked với member đó.
+> Option ondelete='cascade` để khi member record bị xóa thì partner linked cũng sẽ được remove thông tin.
