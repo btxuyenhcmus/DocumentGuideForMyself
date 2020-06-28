@@ -300,3 +300,11 @@
     > Và khi chúng ta tạo mới một member thì tương ứng một partner cũng được tạo ra và linked với member đó.
     > Option ondelete='cascade` để khi member record bị xóa thì partner linked cũng sẽ được remove thông tin.
     Link [odoo](https://www.odoo.com/documentation/12.0/reference/orm.html#inheritance-and-extension)
+21. Tất cả các reference trong sách Odoo 12 Development Esentials - 4th
+    - The Building a Module tutorial: [https://www.odoo.com/documentation/12.0/howtos/backend.html](https://www.odoo.com/documentation/12.0/howtos/backend.html)
+    - The Odoo Guidelines provide a list of code conventions and guidelines for module development: [https://www.odoo.com/documentation/12.0/reference/guidelines.html](https://www.odoo.com/documentation/12.0/reference/guidelines.html)
+    - The Odoo Community Association Guidelines provide a good resource for Odoo development best practices: [https://github.com/OCA/maintainer-tools/blob/master/CONTRIBUTING.md](https://github.com/OCA/maintainer-tools/blob/master/CONTRIBUTING.md)
+    - Model inheritance: [https://www.odoo.com/documentation/12.0/reference/orm.html#inheritance-and-extension](https://www.odoo.com/documentation/12.0/reference/orm.html#inheritance-and-extension)
+    - View inheritance: [https://www.odoo.com/documentation/12.0/reference/views.html#inheritance](https://www.odoo.com/documentation/12.0/reference/views.html#inheritance)
+    - Web Controllers: [https://www.odoo.com/documentation/12.0/reference/http.html#controllers](https://www.odoo.com/documentation/12.0/reference/http.html#controllers)
+    - The Odoo official documentation provides additional resources on data files: [https://www.odoo.com/documentation/12.0/reference/data.html#](https://www.odoo.com/documentation/12.0/reference/data.html#)
