@@ -1,45 +1,45 @@
 # Một số lưu ý khi phát triễn dự án odoo
 1. Khi chỉ cần lấy id của một record thông qua **env** thì nên dùng `_search`
-```
-# example:
-order_line = self.env['sale.order.line']._search([('name', '=', str)], limit=1)
+    ```
+    # example:
+    order_line = self.env['sale.order.line']._search([('name', '=', str)], limit=1)
 
-# Result:
-This will return for you an integer array [id]
-```
+    # Result:
+    This will return for you an integer array [id]
+    ```
 2. Khi bạn cần lấy một record thông qua **env** thì nên dùng `search` vì khi gọi `search` thì nó sẽ gọi hàm `_search` trước tiên rồi sẽ gọi hàm `browse` để load các record tương ứng với các *id* trả về từ hàm `_search`.
-```
-# Example:
-order_line = self.env['sale.order.line'].search([('name', '=', str)], limit=1)
+    ```
+    # Example:
+    order_line = self.env['sale.order.line'].search([('name', '=', str)], limit=1)
 
-# Result:
-This will return for you an object array [sale.order.line(id, )]
-```
+    # Result:
+    This will return for you an object array [sale.order.line(id, )]
+    ```
 3. Khi viết các button write state cho các record thì cần lưu ý kiểm tra điều kiện trước khi `write` vì khi có nhiều client cùng lúc tác động nếu không check điều kiện dẫn đến bị `write` nhiều lần.
-```
-# Example
-# Don't right:
-self.write({
-    'state': received,
-})
+    ```
+    # Example
+    # Don't right:
+    self.write({
+        'state': received,
+    })
 
-# Right:
-self.filtered({lambda rec: rec.state == 'draft'}).write({
-    'state': received
-})
-```
-> Vì khi có nhiều client cùng truy cập một pages, khi client thứ nhất write trạng thái của record nhưng bên client thứ 2 vì còn lưu cache nên button đó không mất đi và vẫn thực hiện được action của button. Code như trên để tránh được việc đó.
+    # Right:
+    self.filtered({lambda rec: rec.state == 'draft'}).write({
+        'state': received
+    })
+    ```
+    > Vì khi có nhiều client cùng truy cập một pages, khi client thứ nhất write trạng thái của record nhưng bên client thứ 2 vì còn lưu cache nên button đó không mất đi và vẫn thực hiện được action của button. Code như trên để tránh được việc đó.
 4. Khi cần lấy những dòng dữ liệu trong fields **one2many** với điều kiện đơn giản thì thay vì dùng **loop** ta nên dùng *filtered*
-```
-# Practice with calculating number of line in order have state is done
-count = len(self.order_line_ids.filtered(lambda line: line.state == 'done'))
+    ```
+    # Practice with calculating number of line in order have state is done
+    count = len(self.order_line_ids.filtered(lambda line: line.state == 'done'))
 
-# It will return an number that less greater than len(self.order_line_ids)
-```
-Đế lấy ra danh sách id, hay name hay bất cứ thuộc tính nào ta có thể dùng mapped
-```
-self.order_line_ids.filtered(lambda line: line.state == 'done').mapped('product_id')
-```
+    # It will return an number that less greater than len(self.order_line_ids)
+    ```
+    Đế lấy ra danh sách id, hay name hay bất cứ thuộc tính nào ta có thể dùng mapped
+    ```
+    self.order_line_ids.filtered(lambda line: line.state == 'done').mapped('product_id')
+    ```
 5. Các thao tác với fields **one2many** đặc biệt:
     - (0, 0, { values }) link to a new record that needs to be created with the given values dictionary
     - (1, ID, { values }) update the linked record with id = ID (write *values* on it)
@@ -48,72 +48,72 @@ self.order_line_ids.filtered(lambda line: line.state == 'done').mapped('product_
     - (4, ID) link to existing record with id = ID (adds a relationship)
     - (5) unlink all (like using (3, ID) fr all linked records)
     - (6, 0, [IDs]) replace the list of linked IDs (like using (5) then (4, ID) for each ID in the list of IDs)
-```
-# Example
-tracking.receipt_line_ids = [(0, 0, {
-    'name': name,
-    'product_id': product_id.id,
-    'state': 'received
-})]
-```
+    ```
+    # Example
+    tracking.receipt_line_ids = [(0, 0, {
+        'name': name,
+        'product_id': product_id.id,
+        'state': 'received
+    })]
+    ```
 6. Tạo User cho từng module
-```
-# Example for location module:
-# Create category inside security folder of location module
-<record id="module_location_category" model="ir.module.category">
-    <field name="name">Location</field>
-</record>
+    ```
+    # Example for location module:
+    # Create category inside security folder of location module
+    <record id="module_location_category" model="ir.module.category">
+        <field name="name">Location</field>
+    </record>
 
-# Create User Group
-<record id="group_location_user" model="ir.groups">
-    <field name="name">User</field>
-    <field name="category_id" ref="module_location_category"/>
-    <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-</record>
+    # Create User Group
+    <record id="group_location_user" model="ir.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_location_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
 
-# Create Manager Group
-<record id="group_location_manager" model="ir.groups">
-    <field name="name">Manager</field>
-    <field name="category_id" ref="module_location_category"/>
-    <field name="implied_ids" eval="[(4, ref('group_location_user'))]"/>
-    <field name="users" eval=[(4, ref('base.user_root')),
-                              (4, ref('base.user_admin'))]/>
-</record>
-```
-> Define header of csv
-**id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink**
+    # Create Manager Group
+    <record id="group_location_manager" model="ir.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_location_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_location_user'))]"/>
+        <field name="users" eval=[(4, ref('base.user_root')),
+                                (4, ref('base.user_admin'))]/>
+    </record>
+    ```
+    > Define header of csv
+    **id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink**
 7. dict vals in *create* and *write*
-Nếu muốn xét xem field nào đó có giá trị được cung cấp hay không ta cần kiểm tra đầu vào có nó hay không trước khi thực hiện **TODO**
-```
-# Example
-def write(self, vals):
-    if not vals.get('lat') and not vals.get('long'):
-        return super(Location, self).write(vals)
-```
-Nghĩa là nếu như khi một location được update nhưng không có thông tin update của tọa độ lat long thì không thực hiện những thao tác tiếp theo với tọa độ.
-**Note:**
-    - Hàm super create sẽ trả về  True/False nếu việc tạo dữ liệu thành công/không thành công. Hàm super write sẽ trả về record sau khi đã update.
-    - Khi thực hiện việc update thông tin của dữ liệu nếu chỉ update một field đơn lẻ thì có thể dùng `write` hay việc gán bình thường. *Nhưng* khi thay đổi thông tin của nhiều field cùng một lúc thì nên dùng `write` vì khi dùng phép gán nhiều lần thì nó sẽ gọi hàm write nhiều lần.
+    Nếu muốn xét xem field nào đó có giá trị được cung cấp hay không ta cần kiểm tra đầu vào có nó hay không trước khi thực hiện **TODO**
+    ```
+    # Example
+    def write(self, vals):
+        if not vals.get('lat') and not vals.get('long'):
+            return super(Location, self).write(vals)
+    ```
+    Nghĩa là nếu như khi một location được update nhưng không có thông tin update của tọa độ lat long thì không thực hiện những thao tác tiếp theo với tọa độ.
+    **Note:**
+        - Hàm super create sẽ trả về  True/False nếu việc tạo dữ liệu thành công/không thành công. Hàm super write sẽ trả về record sau khi đã update.
+        - Khi thực hiện việc update thông tin của dữ liệu nếu chỉ update một field đơn lẻ thì có thể dùng `write` hay việc gán bình thường. *Nhưng* khi thay đổi thông tin của nhiều field cùng một lúc thì nên dùng `write` vì khi dùng phép gán nhiều lần thì nó sẽ gọi hàm write nhiều lần.
 8. **googlemap**
-```
-import googlemaps
+    ```
+    import googlemaps
 
-def get_google_map_key_api(self):
-    return self.env['ir.config_parameter'].sudo().get_param('google.api_key_geocode')
+    def get_google_map_key_api(self):
+        return self.env['ir.config_parameter'].sudo().get_param('google.api_key_geocode')
 
-def get_distance_from_google(self, start, end):
-    api_key = self.get_google_map_key_api()
+    def get_distance_from_google(self, start, end):
+        api_key = self.get_google_map_key_api()
 
-    gmaps = googlemaps.Client(key=api_key)
+        gmaps = googlemaps.Client(key=api_key)
 
-    origins = (start['lat'], start['long']) if type(start) is dict else (start.lat, state.long)
-    destinations = (end['lat'], end['long']) if type(end) is dict else (end.lat, end.long)
+        origins = (start['lat'], start['long']) if type(start) is dict else (start.lat, state.long)
+        destinations = (end['lat'], end['long']) if type(end) is dict else (end.lat, end.long)
 
-    try:
-        result = gmaps.distance_matrix(origins=origins, destinations=destinations)
-    except Exception as e:
-        # TODO
-```
+        try:
+            result = gmaps.distance_matrix(origins=origins, destinations=destinations)
+        except Exception as e:
+            # TODO
+    ```
 9. Sự khác biệt giữa `=`, `like`, `ilike`, `=like`, `=ilike`
     - **=**: 2 chuỗi hoàn toàn giống nhau.
     - **like**: chuỗi bên trái nằm bên trong chuỗi bên phải không phân biệt hoa thường.
@@ -125,17 +125,17 @@ def get_distance_from_google(self, start, end):
     - Thực hiện một action với context chỉ định `self.env.ref('module.actions).with_context({'fields': value}).action(self)`.
     - Gán biến context `ctx = dict(self._context) or {}`, nghĩa là lấy ra thông tin về context nếu không có thì trả về một dictionary rỗng.
 11. Lấy đơn vị tiền tệ cho từng company
-```
-def _get_currency(self, cr, uid, context=None):
-    user_obj = self.pool.get('res.users')
-    currency_obj = self.pool.get('res.currency')
-    user = user_obj.browse(cr, uid, uid, context=context)
+    ```
+    def _get_currency(self, cr, uid, context=None):
+        user_obj = self.pool.get('res.users')
+        currency_obj = self.pool.get('res.currency')
+        user = user_obj.browse(cr, uid, uid, context=context)
 
-    if user.company_id:
-        return user.company_id.currency_id.id
-    else:
-        return currency_obj.search(cr, uid, [('rate', '=', 1.0)])[0]
-```
+        if user.company_id:
+            return user.company_id.currency_id.id
+        else:
+            return currency_obj.search(cr, uid, [('rate', '=', 1.0)])[0]
+    ```
 12. Để check điều kiện ràng buộc các field trong module như ngày thàng bắt đầu nhỏ hơn ngày tháng kết thúc, nên dùng `constraint()` thay cho `onchange()` để bắt sự kiện.
 13. Kế thừa một view và muốn thay đổi gì đó ở bản gốc thì chũng ta nên dùng `xpath`, với position như `after, before, replace, attributes`.
 14. Differece between **models.Model** and **models.TransientModel**:
@@ -144,139 +144,140 @@ def _get_currency(self, cr, uid, context=None):
 15. Thao tác với dữ liệu
     - `self.env.cr.excute(sql)`
 16. **Thao tác với cron**
-```
-<record id="availability_create_cron" model="ir.cron">
-    <field name="name">Task DeadLine Reminder</field>
-    <field name="model_id" ref="project.model_project_task"/>
-    <field name="state">code</field>
-    <field name="code">model._cron_deadline_reminder()</field>
-    <field name="user_id" ref="base.user_root" />
-    <field name="interval_number">1</field>
-    <field name="interval_type">days</field>
-    <field name="numbercall">-1</field>
-    <field eval="False" name="doall" />
-</record>
-```
+    ```
+    <record id="availability_create_cron" model="ir.cron">
+        <field name="name">Task DeadLine Reminder</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_deadline_reminder()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+    </record>
+    ```
 17. **Define __mainifest__ stardard**
-```
-{
-    'name': "Task Deadline Reminder",
-    'version': "12.0.1.0.0",
-    'author': 'Cybrosys Techno Solutions',
-    'company': 'Cybrosys Techno Solutions',
-    'website': 'https://www.cybrosys.com',
-    'summary': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
-    'description': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
-    'category': "Project",
-    'depends': ['project'],
-    'license': 'AGPL-3',
-    'data': [
-            'views/deadline_reminder_view.xml',
-            'views/deadline_reminder_cron.xml',
-            'data/deadline_reminder_action_data.xml'
-             ],
-    'demo': [],
-    'images': ['static/description/banner.jpg'],
-    'installable': True,
-    'auto_install': False
-}
-```
+    ```
+    {
+        'name': "Task Deadline Reminder",
+        'version': "12.0.1.0.0",
+        'author': 'Cybrosys Techno Solutions',
+        'company': 'Cybrosys Techno Solutions',
+        'website': 'https://www.cybrosys.com',
+        'summary': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
+        'description': '''Automatically Send Mail To Responsible User if Deadline Of Task is Today''',
+        'category': "Project",
+        'depends': ['project'],
+        'license': 'AGPL-3',
+        'data': [
+                'views/deadline_reminder_view.xml',
+                'views/deadline_reminder_cron.xml',
+                'data/deadline_reminder_action_data.xml'
+                ],
+        'demo': [],
+        'images': ['static/description/banner.jpg'],
+        'installable': True,
+        'auto_install': False
+    }
+    ```
 18. **Create configuration for custom module** display in General Setting
-```
-class CustomModule(models.Model):
-    _name = 'custom.module'
+    ```
+    class CustomModule(models.Model):
+        _name = 'custom.module'
 
-    name = fields.Char(required=True)
-    seats = fields.Integer(string="Number of seats")
-```
-The field *seats* will get default value confiurable in the configuration that we will create.
-Configuration model **res_config_settings.py**
-```
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+        name = fields.Char(required=True)
+        seats = fields.Integer(string="Number of seats")
+    ```
+    The field *seats* will get default value confiurable in the configuration that we will create.
+    Configuration model **res_config_settings.py**
+    ```
+    class ResConfigSettings(models.TransientModel):
+        _inherit = 'res.config.settings'
 
-    default_seats = fields.Interger(default_model='custom.module')
-    my_setting = fields.Char(string="My Setting")
+        default_seats = fields.Interger(default_model='custom.module')
+        my_setting = fields.Char(string="My Setting")
 
-    def get_values(self):
-        res = super(ResConfigSettings, self).get_values()
-        res.update(
-            my_setting = self.env['ir.config_parameter'].sudo().get_param('custom.my_setting')
-        )
-        return res
-    
-    def set_values(self):
-        super(ResConfigSettings, self).set_values()
-        self.env['ir.config_parameter'].sudo().set_param('custom.my_setting', self.my_setting)
-```
-Fields with the prefix `default_` will be handle automatically by Odoo to provide default values for fields in some models. (Nhưng field với tiền tố là `prefix_` sẽ được quản lý tự động bởi Odoo mặt định giá trị cho field ở model tương ứng được khai báo)
+        def get_values(self):
+            res = super(ResConfigSettings, self).get_values()
+            res.update(
+                my_setting = self.env['ir.config_parameter'].sudo().get_param('custom.my_setting')
+            )
+            return res
+        
+        def set_values(self):
+            super(ResConfigSettings, self).set_values()
+            self.env['ir.config_parameter'].sudo().set_param('custom.my_setting', self.my_setting)
+    ```
+    Fields with the prefix `default_` will be handle automatically by Odoo to provide default values for fields in some models. (Nhưng field với tiền tố là `prefix_` sẽ được quản lý tự động bởi Odoo mặt định giá trị cho field ở model tương ứng được khai báo)
 
-Finally there is the view for this model. It is quite a lot code, to match the same style of the other Odoo config pages.
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <record id="custom_setting_view" model="ir.ui.view">
-        <field name="name">Custom Configuration</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')] position="inside">
-                <div class="app_settings_block" data-string="Custom Data-String" string="Custom" data-key="Custom">
-                    <h2>Custom Settings</h2>
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-xs-12 col-md-6 o_setting_box">
-                            <div class="o_setting_right_pane">
-                                <label for="my_setting"/>
-                                <div class="text-muted">
-                                    Description text 1
-                                </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="my_setting" class="o_light_label"/>
+    Finally there is the view for this model. It is quite a lot code, to match the same style of the other Odoo config pages.
+    ```
+    <?xml version="1.0" encoding="UTF-8"?>
+    <odoo>
+        <record id="custom_setting_view" model="ir.ui.view">
+            <field name="name">Custom Configuration</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')] position="inside">
+                    <div class="app_settings_block" data-string="Custom Data-String" string="Custom" data-key="Custom">
+                        <h2>Custom Settings</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="my_setting"/>
+                                    <div class="text-muted">
+                                        Description text 1
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="my_setting" class="o_light_label"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-12 col-md-6 o_setting_box">
-                            <div class="o_setting_right_pane">
-                                <label for="default_seats"/>
-                                <div class="text-muted">
-                                    Description text 2
-                                </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="default_seats" class="o_light_label"/>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="default_seats"/>
+                                    <div class="text-muted">
+                                        Description text 2
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="default_seats" class="o_light_label"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </xpath>
-        </feild>
+                </xpath>
+            </feild>
+        </record>
+    </odoo>
+    ```
+    With the code above, you can access custom configuration in setting menu, To can navigate custom confiuration from custom menu, following code below:
+    ```
+    <record id="custom_settings_action" model="ir.actions.act_window">
+        <field name="name">Custom Configuration</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="custom_setting_view"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'custom'}</field>
     </record>
-</odoo>
-```
-With the code above, you can access custom configuration in setting menu, To can navigate custom confiuration from custom menu, following code below:
-```
-<record id="custom_settings_action" model="ir.actions.act_window">
-    <field name="name">Custom Configuration</field>
-    <field name="res_model">res.config.settings</field>
-    <field name="view_id" ref="custom_setting_view"/>
-    <field name="view_mode">form</field>
-    <field name="target">inline</field>
-    <field name="context">{'module': 'custom'}</field>
-</record>
 
-<menuitem id="custom_settings_menu" name="Configuration" parent="custom_menu" action="custom_settings_actions"/>
-```
+    <menuitem id="custom_settings_menu" name="Configuration" parent="custom_menu" action="custom_settings_actions"/>
+    ```
 19. So sánh số thực
-```
-from odoo.tools.float_utils import float_compare
+    ```
+    from odoo.tools.float_utils import float_compare
 
-float_compare(input_val, check_val, pricision) <= 0 or > 0
-```
+    float_compare(input_val, check_val, pricision) <= 0 or > 0
+    ```
 20. Nhúng model sử dụng **delegation inheritance**
+
     Delegation inheritance cho phép chúng ta tái sử dụng lại cấu trúc data mà không cần phải nhân bản data đó. *Ví dụ:* mỗi thành viên thư viện đều có thông tin thẻ thư viện, địa chỉ, email và số điện thoại. Mà địa chỉ, email và số điện thoại là cấu trúc của model `res.partner` chúng ta tạo lại sẽ dẫn đến `duplicate` data, nhưng chúng ta cũng không thể dùng tính năng kế thừa được, vì khi kế thừa res.partner sẽ bị ảnh hưởng bởi library member và khi thằng khác sử dụng thì nó dư thừa logic.
     > Chú ý rằng, cách đặt _name khách với parent model cũng không hợp lý trong trường hợp này, vì dùng differane value from parent model thì nó sẽ tạo một bảng mới cà copy toàn bộ data cũng như feature -> không hợp lý.
 
