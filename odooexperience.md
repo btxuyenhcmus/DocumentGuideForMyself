@@ -318,3 +318,8 @@
 - `_auto=False` có thể dùng chỉ định chặn việc tự động tạo bảng trong database. Nếu cần thiết, `init()` nên được viết lại.
 - `inherit`
 - `inherits`
+
+23. **Model Type**
+- `models.Model` model dài hạn. Bảng trong database được tạo và và lưu trữ cho đến khi có hành động xóa.
+- `models.TransientModel` được dùng trong `wizard`. Dữ liệu chỉ tồn tại trong một thời gian chỉ định.
+- `models.AbstractModel` không có data được lưu trữ. Chúng được dùng để tái sử dụng tính năng.
