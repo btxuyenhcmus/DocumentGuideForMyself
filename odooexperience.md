@@ -299,3 +299,4 @@
     Như vậy model `library.member` sẽ có các fields của res.partner mà không cần duplicate data vì nhưng thông tin đó được liên kết qua fields partner_id.
     > Và khi chúng ta tạo mới một member thì tương ứng một partner cũng được tạo ra và linked với member đó.
     > Option ondelete='cascade` để khi member record bị xóa thì partner linked cũng sẽ được remove thông tin.
+    Link [odoo](https://www.odoo.com/documentation/12.0/reference/orm.html#inheritance-and-extension)
