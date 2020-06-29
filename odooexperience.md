@@ -346,3 +346,10 @@
     Tham số compute vào được truyền dạng chuỗi (trong dấu ngoặc nháy kép/đơn) khi hàm compute được viết trước hoặc sau khi khai báo thuộc tính.
 
     Tham số compute được truyền dưới dạng tên hàm chỉ khi hàm compute được viết trước khi khai báo field. Ngược lại sẽ báo lỗi.
+25. **SQL model constraints**
+    SQL contraints are added to the database table definition and are enforced directly by PostgreSQL. The are defined using the `_sql_constraints` class attribute.
+
+    *It is a list of tuples, and each tuple has the format `(name, code, error)`*:
+    - **name** is the constraint identifier name
+    - **code** is the PostgreSQL syntax for the constraint
+    - **error** is the error message to present to users when the constraint is not verified
