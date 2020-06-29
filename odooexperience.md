@@ -342,3 +342,7 @@
         column2='p_id', # rel table field for "other" record
         string='Authors') # string label text
     ```
+24. **compute** agrs
+    Tham số compute vào được truyền dạng chuỗi (trong dấu ngoặc nháy kép/đơn) khi hàm compute được viết trước hoặc sau khi khai báo thuộc tính.
+
+    Tham số compute được truyền dưới dạng tên hàm chỉ khi hàm compute được viết trước khi khai báo field. Ngược lại sẽ báo lỗi.
