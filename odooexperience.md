@@ -7,6 +7,7 @@
     # Result:
     This will return for you an integer array [id]
     ```
+
 2. Khi bạn cần lấy một record thông qua **env** thì nên dùng `search` vì khi gọi `search` thì nó sẽ gọi hàm `_search` trước tiên rồi sẽ gọi hàm `browse` để load các record tương ứng với các *id* trả về từ hàm `_search`.
     ```
     # Example:
@@ -15,6 +16,7 @@
     # Result:
     This will return for you an object array [sale.order.line(id, )]
     ```
+
 3. Khi viết các button write state cho các record thì cần lưu ý kiểm tra điều kiện trước khi `write` vì khi có nhiều client cùng lúc tác động nếu không check điều kiện dẫn đến bị `write` nhiều lần.
     ```
     # Example
@@ -29,6 +31,7 @@
     })
     ```
     > Vì khi có nhiều client cùng truy cập một pages, khi client thứ nhất write trạng thái của record nhưng bên client thứ 2 vì còn lưu cache nên button đó không mất đi và vẫn thực hiện được action của button. Code như trên để tránh được việc đó.
+
 4. Khi cần lấy những dòng dữ liệu trong fields **one2many** với điều kiện đơn giản thì thay vì dùng **loop** ta nên dùng *filtered*
     ```
     # Practice with calculating number of line in order have state is done
@@ -40,6 +43,7 @@
     ```
     self.order_line_ids.filtered(lambda line: line.state == 'done').mapped('product_id')
     ```
+
 5. Các thao tác với fields **one2many** đặc biệt:
     - (0, 0, { values }) link to a new record that needs to be created with the given values dictionary
     - (1, ID, { values }) update the linked record with id = ID (write *values* on it)
@@ -56,6 +60,7 @@
         'state': 'received
     })]
     ```
+
 6. Tạo User cho từng module
     ```
     # Example for location module:
@@ -82,6 +87,7 @@
     ```
     > Define header of csv
     **id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink**
+
 7. dict vals in *create* and *write*
     Nếu muốn xét xem field nào đó có giá trị được cung cấp hay không ta cần kiểm tra đầu vào có nó hay không trước khi thực hiện **TODO**
     ```
@@ -94,6 +100,7 @@
     **Note:**
         - Hàm super create sẽ trả về  True/False nếu việc tạo dữ liệu thành công/không thành công. Hàm super write sẽ trả về record sau khi đã update.
         - Khi thực hiện việc update thông tin của dữ liệu nếu chỉ update một field đơn lẻ thì có thể dùng `write` hay việc gán bình thường. *Nhưng* khi thay đổi thông tin của nhiều field cùng một lúc thì nên dùng `write` vì khi dùng phép gán nhiều lần thì nó sẽ gọi hàm write nhiều lần.
+
 8. **googlemap**
     ```
     import googlemaps
@@ -114,16 +121,19 @@
         except Exception as e:
             # TODO
     ```
+
 9. Sự khác biệt giữa `=`, `like`, `ilike`, `=like`, `=ilike`
     - **=**: 2 chuỗi hoàn toàn giống nhau.
     - **like**: chuỗi bên trái nằm bên trong chuỗi bên phải không phân biệt hoa thường.
     - **=like**: chuỗi bên trái bằng chuỗi bên phải *không* phân biệt hoa thường.
     - **ilike**: chuỗi bên trái nằm bên trong chuỗi bên phải *có* phân biệt hoa thường.
     - **=ilike**: chuỗi bên trái bằng chuỗi bên phải *có* phân biệt hoa thường.
+
 10. Doing with **context**:
     - get context with current woking `self.env.context.get('fields', False)` - Nghĩa là nó sẽ lấy giá trị của fields, nêu không có thì sẽ trả về *False*.
     - Thực hiện một action với context chỉ định `self.env.ref('module.actions).with_context({'fields': value}).action(self)`.
     - Gán biến context `ctx = dict(self._context) or {}`, nghĩa là lấy ra thông tin về context nếu không có thì trả về một dictionary rỗng.
+
 11. Lấy đơn vị tiền tệ cho từng company
     ```
     def _get_currency(self, cr, uid, context=None):
@@ -136,13 +146,18 @@
         else:
             return currency_obj.search(cr, uid, [('rate', '=', 1.0)])[0]
     ```
+
 12. Để check điều kiện ràng buộc các field trong module như ngày thàng bắt đầu nhỏ hơn ngày tháng kết thúc, nên dùng `constraint()` thay cho `onchange()` để bắt sự kiện.
+
 13. Kế thừa một view và muốn thay đổi gì đó ở bản gốc thì chũng ta nên dùng `xpath`, với position như `after, before, replace, attributes`.
+
 14. Differece between **models.Model** and **models.TransientModel**:
     - `models.Model` dùng cho các model chính và sẽ được lưu trong database mãi mãi đến khi có thao tác xóa dữ liệu trong database.
     - `models.TransientModel` dùng cho các model tạm thời (Temporary) như tạo cái *wizard* và nó chỉ được lưu trong một thời gian quy định.
+
 15. Thao tác với dữ liệu
     - `self.env.cr.excute(sql)`
+
 16. **Thao tác với cron**
     ```
     <record id="availability_create_cron" model="ir.cron">
@@ -157,6 +172,7 @@
         <field eval="False" name="doall" />
     </record>
     ```
+
 17. **Define __mainifest__ stardard**
     ```
     {
@@ -181,6 +197,7 @@
         'auto_install': False
     }
     ```
+    
 18. **Create configuration for custom module** display in General Setting
     ```
     class CustomModule(models.Model):
@@ -308,23 +325,25 @@
     - View inheritance: [https://www.odoo.com/documentation/12.0/reference/views.html#inheritance](https://www.odoo.com/documentation/12.0/reference/views.html#inheritance)
     - Web Controllers: [https://www.odoo.com/documentation/12.0/reference/http.html#controllers](https://www.odoo.com/documentation/12.0/reference/http.html#controllers)
     - The Odoo official documentation provides additional resources on data files: [https://www.odoo.com/documentation/12.0/reference/data.html#](https://www.odoo.com/documentation/12.0/reference/data.html#)
+
 22. **Model attributes**
-- `_name` là internal identifier. Là thuộc tính bắt buộc khi tạo mới model.
-- `_description` được hiển thị trong model detail trên giao diện. Nó là tùy chọn nhưng được khuyến khích nêu như bạn không muốn xuất hiện vài dòng `warning` trong `log` của bạn.
-- `_order` dùng để sắp xếp record khi được `browsed` hay hiện trên list view. Nó là một chuỗi được dùng trong SQL `order by clouse`, do đó chúng ta có thể làm bất cứ điều gì hợp lý như các hành vi thông minh hơn, hay là một field many-to-one.
-- `_rec_name` chỉ định ra field dùng để mô tả khi nó được tham chiếu ở field related, ví dụ như quan hệ many-to-one. Mặc định, sẽ dùng field `name`.
-- `_table` là tên của bảng trong database. Thông thường, nó được tự động tạo ra bở ORM với quy ước là tên của model với dấu chấm chuyển thành dấu gạch dưới-underscores.
-- `_log_access=False` có thể chỉ định để chặn việc tự động tạo ra các field tracking: `create_uid, create_date, write_uid, và write_date`.
-- `_auto=False` có thể dùng chỉ định chặn việc tự động tạo bảng trong database. Nếu cần thiết, `init()` nên được viết lại.
-- `inherit`
-- `inherits`
+    - `_name` là internal identifier. Là thuộc tính bắt buộc khi tạo mới model.
+    - `_description` được hiển thị trong model detail trên giao diện. Nó là tùy chọn nhưng được khuyến khích nêu như bạn không muốn xuất hiện vài dòng `warning` trong `log` của bạn.
+    - `_order` dùng để sắp xếp record khi được `browsed` hay hiện trên list view. Nó là một chuỗi được dùng trong SQL `order by clouse`, do đó chúng ta có thể làm bất cứ điều gì hợp lý như các hành vi thông minh hơn, hay là một field many-to-one.
+    - `_rec_name` chỉ định ra field dùng để mô tả khi nó được tham chiếu ở field related, ví dụ như quan hệ many-to-one. Mặc định, sẽ dùng field `name`.
+    - `_table` là tên của bảng trong database. Thông thường, nó được tự động tạo ra bở ORM với quy ước là tên của model với dấu chấm chuyển thành dấu gạch dưới-underscores.
+    - `_log_access=False` có thể chỉ định để chặn việc tự động tạo ra các field tracking: `create_uid, create_date, write_uid, và write_date`.
+    - `_auto=False` có thể dùng chỉ định chặn việc tự động tạo bảng trong database. Nếu cần thiết, `init()` nên được viết lại.
+    - `inherit`
+    - `inherits`
 
 23. **Model Type**
-- `models.Model` model dài hạn. Bảng trong database được tạo và và lưu trữ cho đến khi có hành động xóa.
-- `models.TransientModel` được dùng trong `wizard`. Dữ liệu chỉ tồn tại trong một thời gian chỉ định.
-- `models.AbstractModel` không có data được lưu trữ. Chúng được dùng để tái sử dụng tính năng.
+    - `models.Model` model dài hạn. Bảng trong database được tạo và và lưu trữ cho đến khi có hành động xóa.
+    - `models.TransientModel` được dùng trong `wizard`. Dữ liệu chỉ tồn tại trong một thời gian chỉ định.
+    - `models.AbstractModel` không có data được lưu trữ. Chúng được dùng để tái sử dụng tính năng.
 
 24. **Many2many** field
+
     Ở cấp độ database, mỗi quan hệ nhiều nhiều không tạo ra bất cứ cột nào, thay vào đó nó sẽ tự tạo ra một bản lưu trữ lại mỗi quan hệ giữa các record. Một bảng đặt biệt chỉ có 2 fields ID.
 
     Mặt định, bảng sẽ có tên được gọp lại 2 bảng với dấu dạch dưới và kết thúc bằng `_rel`.
@@ -342,14 +361,25 @@
         column2='p_id', # rel table field for "other" record
         string='Authors') # string label text
     ```
+
 24. **compute** agrs
+
     Tham số compute vào được truyền dạng chuỗi (trong dấu ngoặc nháy kép/đơn) khi hàm compute được viết trước hoặc sau khi khai báo thuộc tính.
 
     Tham số compute được truyền dưới dạng tên hàm chỉ khi hàm compute được viết trước khi khai báo field. Ngược lại sẽ báo lỗi.
+
 25. **SQL model constraints**
+
     SQL contraints are added to the database table definition and are enforced directly by PostgreSQL. The are defined using the `_sql_constraints` class attribute.
 
     *It is a list of tuples, and each tuple has the format `(name, code, error)`*:
     - **name** is the constraint identifier name
     - **code** is the PostgreSQL syntax for the constraint
     - **error** is the error message to present to users when the constraint is not verified
+
+26. **Accessing date and time values**
+
+    Odoo also provides a few additional convenience functions in the odoo.tools.date_utils module. These functions are as follows:
+    - `start_of(value, granularity)` thời gian bắt đầu của đơn vị chỉ định (granularity) -- year , quarter , month , week , day , or hour .
+    - `end_of(value, granularity)` thời gian kết thúc của đơn vị chỉ định như trên.
+    - 
