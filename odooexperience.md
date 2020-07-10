@@ -124,10 +124,10 @@
 
 9. Sự khác biệt giữa `=`, `like`, `ilike`, `=like`, `=ilike`
     - **=**: 2 chuỗi hoàn toàn giống nhau.
-    - **like**: chuỗi bên trái nằm bên trong chuỗi bên phải không phân biệt hoa thường.
-    - **=like**: chuỗi bên trái bằng chuỗi bên phải *không* phân biệt hoa thường.
-    - **ilike**: chuỗi bên trái nằm bên trong chuỗi bên phải *có* phân biệt hoa thường.
-    - **=ilike**: chuỗi bên trái bằng chuỗi bên phải *có* phân biệt hoa thường.
+    - **like**: chuỗi bên trái nằm bên trong chuỗi bên phải *có* phân biệt hoa thường.
+    - **=like**: chuỗi bên trái bằng chuỗi bên phải *có* phân biệt hoa thường.
+    - **ilike**: chuỗi bên trái nằm bên trong chuỗi bên phải *không* phân biệt hoa thường.
+    - **=ilike**: chuỗi bên trái bằng chuỗi bên phải *không* phân biệt hoa thường.
 
 10. Doing with **context**:
     - get context with current woking `self.env.context.get('fields', False)` - Nghĩa là nó sẽ lấy giá trị của fields, nêu không có thì sẽ trả về *False*.
