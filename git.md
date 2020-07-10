@@ -61,3 +61,8 @@ Run
 git pull
 ```
 After push commit, it will require new access token and save in global for the last times.
+
+## copy commit from another branch
+```
+$ git cherry-pick <id_commit>
+```
