@@ -383,3 +383,30 @@
     - `start_of(value, granularity)` thời gian bắt đầu của đơn vị chỉ định (granularity) -- year , quarter , month , week , day , or hour .
     - `end_of(value, granularity)` thời gian kết thúc của đơn vị chỉ định như trên.
     - 
+
+27. **Notification**
+    - Sticky Notification
+        ```
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Enter your custom message here',
+                'type': 'rainbow_man',
+            }
+        }
+        ```
+        ![sticky](./src/static/sticky_notification.png)
+    - Alerts
+        ```
+        <xpath expr="//sheet" position="before">
+            <div class="alert alert-danger" role="alert" style="margin-bottom: 0px;" attrs="{'invisible': [('state', '!=', 'sale')]}">
+            This is from the sales team
+                <bold>
+                    <a class="alert-link" role="button">
+                        <field name="team_id" readonly="True"/>
+                    </a>
+                </bold>
+            </div>
+        </xpath>
+        ```
+        ![alert](./src/static/alert.png)
