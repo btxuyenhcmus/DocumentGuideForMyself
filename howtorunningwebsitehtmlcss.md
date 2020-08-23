@@ -49,3 +49,31 @@ và sử dòng root lại từ `/var/www/html` thành `/var/www/btxuyenhcmus.git
 
 !Done, giờ hãy vào localhost và chiêm ngưỡng thành quả thôi nào.
 ![nginx-running](./src/static/nginx-html.png)
+
+## Cách 2: Dùng webserver `Apache2`
+Chúng ta sẽ bắt đầu từ bước cài đặt apache2 webserver nha, còn những bước trước đó hoàn toàn giống với cách 1
+```
+$ sudo apt install apache2
+```
+Sau khi cài xong thì nhớ bật nó lên nha
+```
+$ service apache2 start
+```
+Kiểm tra thành quả
+![apache](./src/static/apache.png)
+
+Giờ thì mình tiếp tục clone project về
+```
+$ git clone https://github.com/btxuyenHCMUS/btxuyenhcmus.github.io.git
+```
+Giờ mình sẽ config apache tương tự như nginx
+```
+$ vim /etc/apache2/sites-enabled/000-default.conf
+```
+Sửa DocumentRoot thành `/var/www/btxuyenhcmus.github.io`
+
+Restart apache
+```
+$ service apache2 restart
+```
+Và chiêm ngưỡng thành quả
