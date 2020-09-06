@@ -115,7 +115,7 @@ server {
     # ... Các nội dung lúc trước
     ssl on;
     ssl_certificate /etc/letsencrypt/live/home.codehub.digital/fullchain.pem;
-    ssl_certificate /etc/letsencrypt/live/home.codehub.digital/privkey.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.codehub.digital/privkey.pem;
 }
 ```
 Đến bước này các bận cần biết một vấn đề là port chúng ta đang sử dụng. HTTP connections sử dụng port 80 nhưng SSL connections sử dụng port 443. Giải pháp là chuyển từ port 80 thành 443.
