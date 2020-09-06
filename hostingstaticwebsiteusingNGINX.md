@@ -72,6 +72,7 @@ Ngay bây giờ khi file đã được tạo, chúng ta sẽ thêm nó vào site
 ```
 $ sudo ln -s /etc/nginx/sites-available/home.codehub.digital /etc/nginx/sites-enabled/home.codehub.digital
 ```
+> Chú ý: các bạn cần viết đúng đường dẫn và trong folder sites-enabled sau khi ls file home.codehub.digital phải màu xanh.
 Ngay bây giờ mình cần phải restart nginx để nó load file mình vừa tạo.
 ```
 $ sudo service nginx restart
@@ -81,5 +82,86 @@ Nếu bạn gặp rồi ở bước này thì cần xem lại cú pháp của co
 Và sau khi bạn start được nginx thì mọi thứ hoạt động, bạn đã có thể vào website của mình `http://home.codehub.digital` và chú ý rằng mới chỉ là `http` nếu bạn bị lỗi không vào được web thì hãy check lại là đang `http` hay `https`.
 
 # Enable HTTPS
+## Step 1: Acquire an SSL cert
 
+Chúng ta có thể lấy chứng chỉ SSL miễn phí từ **LetsEncrypt**:
+```
+$ sudo apt-get install software-properties-common
+$ sudo add-apt-repository ppa:certbot/certbot
+$ sudo apt-get update
+$ sudo apt-get install python-certbot-nginx
+$ sudo certbot --nginx certonly
+```
+Sau khi thực hiện các bước trên, certs sẽ được lưu trong thư mục `/etc/letsencrypt/live/home.codehub.digital`;
 
+**Enable auto-renewal for certificates:**
+Edit the `crontab` and create a CRON job to run the renewal command (một công cụ schedule action trên linu):
+```
+$ sudo crontab -e
+```
+Nếu là lần đầu tiên vào scron nó sẽ yêu cầu chọn trình soạn thảo 1. nano, 2. Vim basic, 3. Vim advan, ...
+
+Paste đoạn code bên dưới vào cuối file:
+```
+17 7 * * * certbot renew --post-hook "systemctl reload nginx"
+```
+
+## Step 2. Tell NGINX to use the SSL cert for your website
+Sửa lại file config ban đầu.
+
+Bên trong `server` block chúng ta đã tạo, thay đổi đường dẫn để trỏ về file chứng chỉ chúng ta đã lưu.
+```
+server {
+    # ... Các nội dung lúc trước
+    ssl on;
+    ssl_certificate /etc/letsencrypt/live/home.codehub.digital/fullchain.pem;
+    ssl_certificate /etcc/letsencrypt/live/home.codehub.digital/privkey.pem;
+}
+```
+Đến bước này các bận cần biết một vấn đề là port chúng ta đang sử dụng. HTTP connections sử dụng port 80 nhưng SSL connections sử dụng port 443. Giải pháp là chuyển từ port 80 thành 443.
+```
+server {
+    listen 443 default_server;
+    listen [::]:443 default_server;
+    # ... các nội dung cũ...
+}
+```
+Tuy nhiên, vấn đề gặp phải khi người dùng truy cập không phải là `https://`. Để giải quyết vấn đề này, chúng ta sẻ redirect HTTP request thành HTTPS request. Add server block sau bock trước đó.
+```
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name home.codehub.digital;
+    rewrite ^ https://$host$request_uri? permanent;
+}
+```
+Bây giờ chúng ta cần restart NGINX để nạp các config vừa rồi.
+
+# Improve performance
+## Enable HTTP/2
+HTTP/2 cho phép trình duyệt request tập tin song song, cải thiện hoàn hảo tốc độ truyền. Bạn sẽ cần kích hoạt HTTPS. Sửa file config nginx và thêm `http2`, sau đó restart NGINX:
+```
+server {
+    listen 443 http2 default_server;
+    listen [::]:443 http2 default_server;
+    # ... all another content
+}
+```
+
+## Enable GZIP compression
+nén gzip có thể làm giảm đáng kể kích thước của tập tin trong suốt quá trình truyền.
+```
+server {
+    # .. previous content
+    gzip on;
+    gzip_types application/javascript image/* text/css;
+    gunzip on;
+}
+```
+Điều này đảm bảo rằng javascript, images, và css files luôn được nén.
+
+> **Chú ý:**
+>
+> Một lỗ hổng bảo mật tồn tại khi bạn kích hoạt nén gzip kết hợp với HTTPS cho phép kẻ tấn công giải mã dữ liệu. Đối với các trang web tĩnh không cung cấp dữ liệu nhạy cảm của người dùng, đây là một vấn đề nhỏ, nhưng đối với bất kỳ trang web nào cung cấp thông tin nhạy cảm, bạn nên tắt tính năng nén cho các tài nguyên đó.
+
+## Enable client-side caching
