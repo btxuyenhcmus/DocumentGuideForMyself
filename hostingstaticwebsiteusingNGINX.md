@@ -115,7 +115,7 @@ server {
     # ... Các nội dung lúc trước
     ssl on;
     ssl_certificate /etc/letsencrypt/live/home.codehub.digital/fullchain.pem;
-    ssl_certificate /etcc/letsencrypt/live/home.codehub.digital/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/home.codehub.digital/privkey.pem;
 }
 ```
 Đến bước này các bận cần biết một vấn đề là port chúng ta đang sử dụng. HTTP connections sử dụng port 80 nhưng SSL connections sử dụng port 443. Giải pháp là chuyển từ port 80 thành 443.
@@ -165,3 +165,17 @@ server {
 > Một lỗ hổng bảo mật tồn tại khi bạn kích hoạt nén gzip kết hợp với HTTPS cho phép kẻ tấn công giải mã dữ liệu. Đối với các trang web tĩnh không cung cấp dữ liệu nhạy cảm của người dùng, đây là một vấn đề nhỏ, nhưng đối với bất kỳ trang web nào cung cấp thông tin nhạy cảm, bạn nên tắt tính năng nén cho các tài nguyên đó.
 
 ## Enable client-side caching
+Some files don't ever change, or change rarely, so there's no need to have users re-download the latest version. You can set cache control headers to provide hints to browsers to let them know what files they shouldn't request again.
+> Một số tệp không bao giờ thay đổi hoặc hiế khi thay đổi, do đó, người dùng không cần phải tải xuống lại phiên bản mới nhất. Bạn có thể đặt tiêu đề kiểm soát bộ nhớ cache để cung cấp gợi ý cho cá trình duyệt để cho họ biết những tệp nào họ không nên yêu cầu lại.
+```
+server {
+    # ... after the location / block
+    location ~* \.(jpg|jpeg|png|gif|ico)$ {
+        expires 30d;
+    }
+    location ~* \.{css|js}$ {
+        expires 7d;
+    }
+}
+```
+Kiểm tra tần suất các loại tệp khác nhau thay đổi, sau đó đặt chúng hết hạn vào những thời điểm thích hợp.
