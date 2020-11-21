@@ -22,3 +22,24 @@ To exit environment, input
 ```
 deactivate
 ```
+# List all user
+```
+cut -d: -f1 /etc/passwd
+```
+# Delete a user and its directory
+```
+sudo userdel username
+sudo rm -r /home/username
+```
+# Add a home directory to an existing user
+```
+sudo usermod -d /home/directory user
+```
+# Create user with directory and bash
+```
+sudo useradd -m -d /home/username -U -r -s /bin/bash username
+```
+# How to set password for a user that you don't remmember old password
+```
+sudo passwd username
+```
