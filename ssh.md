@@ -15,3 +15,13 @@ patse publish key to file `authorized_keys` in server
 ```
 $ ~/.ssh/authorized_keys
 ```
+
+# How to setup authorized_keys for any user
+```
+$ mkdir ~/.ssh
+$ chmod 700 ~/.ssh
+$ vim ~/.ssh/authorized_keys
+    # patse your ssh key to file
+$ chomod 600 ~/.ssh/authorized_keys
+```
+If you are permission denied, you can't edit config in `/etc/ssh/ssh_config` and restart `ssh` service
