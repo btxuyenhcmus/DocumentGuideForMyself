@@ -410,3 +410,7 @@
         </xpath>
         ```
         ![alert](./src/static/alert.png)
+ 28. Controller nhận body request không cần qua tham số `params`:
+    ```
+    data = json.loads(request.httprequest.data.decode('utf-8'))
+    ```
