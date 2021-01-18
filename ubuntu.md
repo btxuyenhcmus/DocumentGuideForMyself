@@ -47,3 +47,10 @@ sudo passwd username
 ```
 sudo chown -R user:groud file/folder
 ```
+Giải thích các thông số trong lệnh `ls -l`
+ - Cột đầu tiên: `drwxr-xr-x` show các thông tin quyền rwx/read,write,excute và kí tự `d` đầu dòng thể hiện nó là tập tin `f` hoặc thư mục `d`.
+ - Cột thứ 2: `2` thể hiện số lượng tập tin liên kết với thư mục đó.
+ - Cột thứ 3 và cột thứ 4: thể hiện user/group.
+ - Cột thứ 5: thể hiện kích thước.
+ - Cột thứ 6: thể hiện ngày sửa cuối cùng.
+ - C
