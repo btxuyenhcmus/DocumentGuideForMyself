@@ -43,3 +43,7 @@ sudo useradd -m -d /home/username -U -r -s /bin/bash username
 ```
 sudo passwd username
 ```
+# Assigne UID and GID (user and group) for one or multi file/folder
+```
+sudo chown -R user:groud file/folder
+```
