@@ -34,4 +34,4 @@
     - Viết config nginx thành 2 thư mục `conf` và `conf.prod`.
     - Tất cả các images cần đánh `tags version alpine` cho nó.
 
-6. Viết file `bash scripts` chạy tự động.
+6. Viết file `bash scripts` chạy tự động. (CI/CD)
