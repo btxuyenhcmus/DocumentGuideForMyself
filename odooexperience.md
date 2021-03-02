@@ -414,3 +414,8 @@
     ```
     data = json.loads(request.httprequest.data.decode('utf-8'))
     ```
+ 29. Xử lý lỗi trắng màng hình sau khi login khi vừa mới restore một data mới.
+    Vào trong postgresql thực hiện câu lệnh sau:
+    ```
+    DELETE FROM ir_attachment WHERE datas_fname SIMILAR TO '%.(js|css)'
+    ```
