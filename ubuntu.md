@@ -53,4 +53,39 @@ Giải thích các thông số trong lệnh `ls -l`
  - Cột thứ 3 và cột thứ 4: thể hiện user/group.
  - Cột thứ 5: thể hiện kích thước.
  - Cột thứ 6: thể hiện ngày sửa cuối cùng.
- - C
+
+# Cấu hình ssh để kết nối với gitlab service.
+1. Tạo một key_rsa dùng riêng cho gitlab
+    ```
+    ssh-keygen -t rsa -C "your_email@example.com" -P "" -q -f ~/.ssh/gitlab_rsa
+    ```
+    Kết quả của `cmd` này sẽ sinh ra một cặp key (pub/priv) trong thư mục `~/.ssh/`
+
+2. Test service `ssh-agent` và add key vừa mới tạo vào bộ quản lý `key`
+    ```
+    eval $(ssh-agent -s)
+    ssh-add /home/username/.ssh/gitlab_rsa
+    ```
+
+3. Tạo ra tập tin `~/.ssh/config` và điền các thông tin sau
+    ```
+    # Gitlab.com
+    Host gitlab.com
+      Hostname gitlab.com
+      PreferredAuthentications publickey
+      IdentityFile /home/username/.ssh/gitlab_rsa
+    ```
+
+4. Thiết lập quyền vào tập tin `config`
+    ```
+    chmod 600 ~/.ssh/config
+    ```
+
+5. Login vào `gitlab` chọn mục `avatar` -> `Preferences` -> `SSH Keys` và copy content của file `~/.ssh/gitlab_rsa.pub` paste vào field key và tạo.
+
+6. Test kết nối với gitlab
+    ```
+    ssh -T git@gitlab.com
+    ```
+    Nếu thành công nó sẽ báo `webcome username`
+    
