@@ -35,3 +35,15 @@
     - Tất cả các images cần đánh `tags version alpine` cho nó.
 
 6. Viết file `bash scripts` chạy tự động, (CI/CD).
+
+7. Kinh nghiệp xương máu với letscrypt khi lấy chứng chỉ đó là.
+    - Quên bỏ đoạn config
+    ```
+    location ~ /.well-known/acme-challenge {
+        allow all;
+        root /var/www/html;
+    }
+    ```
+    Dẫn đến không mount được vào thư mục /var/www/html nên kh thể xác thực domain.
+
+    Từn nay nên để đoạn code này vào block port 80
