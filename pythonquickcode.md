@@ -177,3 +177,20 @@ arr = ['12', '21', '121']
 arr = map(str, arr)
 >>> [12, 21, 121]
 ```
+23. **Python switch case function**
+```
+tasks = {}
+def task(f): return tasks.setdefault(f.__name__, f)
+
+@task
+def p1():
+    print("Function 1")
+
+@task
+def p2():
+    print("Function 2")
+
+tasks["p1"]
+
+>> Function 1
+```

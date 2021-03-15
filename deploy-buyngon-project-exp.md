@@ -47,3 +47,10 @@
     Dẫn đến không mount được vào thư mục /var/www/html nên kh thể xác thực domain.
 
     Từn nay nên để đoạn code này vào block port 80
+ 8. Improve deployment lần cuối.
+    - Vì dự án lần này được viết bằng nodejs và reactjs với các subproject (web/admin/api/mongodb/nginx/certbot).
+    - Khi ở môi trường `development` thì tất cả các subproject phải được run bằng container để chạy code.
+    - Riêng ở môi trường staging và product, code web và admin là thuần frontend, mà reactjs thì có 2 mode là debug và stable.
+    - Như vậy ở 2 subproject web và admin ta chỉ cần chạy một `container` tạm thời để build lấy `mount` thự mục build sau đó bỏ vào `nginx` để active frontend lên.
+    - Trong phần api thì config env sẽ dùng tên của service để liên kết.
+    - Như vậy trong toàn bộ project chỉ có 3 container chạy song song đó là `mongodb`, `api`, `nginx`. và chỉ có nginx là có public port.
