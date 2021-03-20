@@ -116,6 +116,8 @@ add(3, 4)
 ```
 16. Tạo nhanh một list
 ```
+>>> list = list(range(5))
+[1, 2, 3, 4, 5]
 >>> list = [key for key in range(5)]
 [1, 2, 3, 4, 5]
 >>> list = [1 for key in ranges(5)]
@@ -150,6 +152,23 @@ Trong python không có `switch..case` nhưng ta có thể dùng dictionary đ�
 >>> print(stdcalc['subtract'](9, 3))
 6
 ```
+Dùng decorater operator
+```
+tasks = {}
+def task(f): return tasks.setdefault(f.__name__, f)
+
+@task
+def p1():
+    print("Function 1")
+
+@task
+def p2():
+    print("Function 2")
+
+tasks["p1"]
+
+>> Function 1
+```
 21. Cách đọc datetime từ excel cho python
 ```
 >>> from datetime import datetime
@@ -177,20 +196,11 @@ arr = ['12', '21', '121']
 arr = map(str, arr)
 >>> [12, 21, 121]
 ```
-23. **Python switch case function**
+
+23. **Python filtered**
 ```
-tasks = {}
-def task(f): return tasks.setdefault(f.__name__, f)
-
-@task
-def p1():
-    print("Function 1")
-
-@task
-def p2():
-    print("Function 2")
-
-tasks["p1"]
-
->> Function 1
+>> sequences = list(range(10))
+>> dived_two = list(filter(lambda self: self % 2 == 0, sequences))
+>> print(dived_two)
+[0, 2, 4, 6, 8]
 ```
