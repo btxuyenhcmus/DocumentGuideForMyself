@@ -30,3 +30,13 @@
     In place, some-network is name of net that redis-server container running on, you can see this by `$ docker inspect redis-server` and read in networkSetting tab
 
 > Follow step by step is you can start redis server and running redis client to ...
+
+## 2. Clear all caches in redis container
+```
+$ docker exec -it redis-container sh
+redis -$ redis-cli
+localhost:port->auth password
+OK
+localhost:port->flushall
+OK
+```
