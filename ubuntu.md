@@ -89,3 +89,5 @@ Giải thích các thông số trong lệnh `ls -l`
     ```
     Nếu thành công nó sẽ báo `webcome username`
     
+# Restore large database
+ - Need up time cpu handle in config before restore
