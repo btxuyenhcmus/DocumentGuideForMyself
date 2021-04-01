@@ -410,12 +410,111 @@
         </xpath>
         ```
         ![alert](./src/static/alert.png)
- 28. Controller nhận body request không cần qua tham số `params`:
+28. Controller nhận body request không cần qua tham số `params`:
     ```
     data = json.loads(request.httprequest.data.decode('utf-8'))
     ```
- 29. Xử lý lỗi trắng màng hình sau khi login khi vừa mới restore một data mới.
+29. Xử lý lỗi trắng màng hình sau khi login khi vừa mới restore một data mới.
     Vào trong postgresql thực hiện câu lệnh sau:
     ```
     DELETE FROM ir_attachment WHERE datas_fname SIMILAR TO '%.(js|css)'
+    ```
+30. Search nhiều fields vào cùng một biến trên `search` view.
+    ```
+    <field name="name" string="Information" filter_domain="['|','|', '|', '|', '|',('name','ilike',self),('customer_fullname','ilike',self),('customer_tel','ilike',self), ('source','ilike',self), ('shipping_customer_fixed','ilike',self),('shipping_phone_fixed','ilike',self)]"/>
+    ```
+31. Chỉ định search view cho từng actions.
+    ```
+    <field name="search_view_id" ref="vn_shipping_order_search_view"/>
+    ```
+32.  Disable form view in one2many xml
+    ```
+    odoo.define('your_module.views', function(require) {
+        "use strict";
+
+        var List = require('web.ListRenderer');
+        List.include({
+            _onRowClicked: function(e) {
+                if (!this.el.classList.contains('tree_no_open')) {
+                    this._super.apply(this, arguments);
+                }
+            }
+        });
+    });
+    ```
+    and set attribute for tree with `class="tree_no_open"`
+    > Note: declare js code in xml with inherit web.assets_backend.
+    ```
+    <?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <data>
+            <template id="assets_backend" inherit_id="web.assets_backend">
+                <xpath expr="." position="inside">
+                    <script type="text/javascript" src="/felixbuy_module/static/src/js/views.js"></script>
+                </xpath>
+            </template>
+        </data>
+    </odoo>
+    ```
+33. Change `title` on all pages.
+    ```
+    odoo.define('felixbuy_module.WebClient', function(require) {
+        "use strict";
+        var AbstractWebClient = require('web.AbstractWebClient');
+        AbstractWebClient = AbstractWebClient.include({
+            start: function(parent) {
+                this.set('title_part', { "zopenerp": "Buyngon" });
+                this._super(parent);
+            },
+        });
+    });
+    ```
+    > Note: declare js code in xml with inherit web.assets_backend.
+34. Very Important! Không được dùng `channels` để triển khai tính năng notify, bởi vì cơ chế longpolling sẽ làm shutdown đột ngột `database`.
+
+35. Get location id from json list name and id
+    ```
+    def _get_location_from_usg(self, address):
+        """
+        This is func load data from static file and 
+        return tuple (province_id, district_id, ward_id)
+        """
+        def _lstrip_all(address):
+            return "".join(address.split())
+        items = address.split(',')
+        province, district = _lstrip_all(items[-1]), _lstrip_all(items[-2])
+        ward, street = _lstrip_all(items[-3]), "".join(items[0: -3])
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        with open(
+            current_path + '/../../static/location/usg-location.json') \
+                as json_file:
+            data = json.load(json_file)
+            address_dicts = list(filter(lambda self: ward.lower() in _lstrip_all(
+                self.get('ward_name', '')).lower(), data))
+            if len(address_dicts) > 1:
+                address_dicts = list(filter(lambda self: district.lower() in _lstrip_all(
+                    self.get('district_name', '')).lower(), address_dicts))
+            if len(address_dicts) > 1:
+                list(filter(lambda self: province.lower() in _lstrip_all(
+                    self.get('province_name', '')).lower(), address_dicts))
+            return address_dicts[0]
+    ```
+
+36. Using `requests` to call open api from another partner.
+    ```
+    try:
+        requests.post(url=url, headers=headers, data=json.dumps(data), timeout=4)
+    except requests.exceptions.Timeout as e:
+        print(e)
+    except:
+        print("Cannot call api!")
+    ```
+
+37. Odoo XML-RPC chỉ cho phép truyền số nguyên 32-bit, do đó để truyền ra bên ngoài ta cần convert số nguyên sang chuỗi.
+    ```
+    def parse_number2string(number):
+        """Convert Interger 32-bit to String"""
+        if not isinstance(number, str):
+            number = str(number)
+        return number
     ```
