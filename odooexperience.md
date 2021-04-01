@@ -513,7 +513,7 @@
 37. Odoo XML-RPC chỉ cho phép truyền số nguyên 32-bit, do đó để truyền ra bên ngoài ta cần convert số nguyên sang chuỗi.
     ```
     def parse_number2string(number):
-        """Convert Interger 32-bit to String"""
+        """Convert Interger 32-bit into String"""
         if not isinstance(number, str):
             number = str(number)
         return number
