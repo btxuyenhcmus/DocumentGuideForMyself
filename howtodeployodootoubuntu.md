@@ -224,3 +224,9 @@ At this point, your server is configured and you can access your Odoo instance a
 ```
 https://example.com
 ```
+
+## Kinh nghiệm xương máu khi deploy với docker.
+1. Config số lượng worker.
+2. db_maxconn tăng lên 128.
+3. config nginx longpolling proxy vào port 8072.
+> Làm những điều này để tránh tình trạng sụp server
