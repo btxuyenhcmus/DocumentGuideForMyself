@@ -518,3 +518,69 @@
             number = str(number)
         return number
     ```
+38. Thêm button cho tree view.
+    Thanh điều khiển chứa các nút chức năng trên list view được hiện thực ở frontend mô tả bằng Qweb:
+    Do đó, ta cần dùng thừa kế QWeb frontend để bổ sung thêm một button ta mong muốn.
+    ```
+    <?xml version="1.0" encoding="UTF-8"?>
+    <templates id="template" xml:space="preserve">
+        <t t-extend="ListView.buttons">
+            <t t-jquery="div.o_list_buttons" t-operation="append" t-if="widget.modelName=='my.module'">
+            <button type="button" class="btn btn-primary o_list_button_multi_update" accesskey="u">
+                    Multi Update
+                </button>
+            </t>
+        </t>
+    </templates>
+    ```
+    > Lưu ý: t-if giúp button mới thêm vào Odoo chỉ render ở view của model **my.module**.
+    Bạn nhớ khai báo template vừa hiện thực vào manifest nhé!
+    ```
+    {
+        #...
+        'qweb': [
+            #'static/src/xml/*.xml',
+            'static/src/xml/btn_tree_multi_update.xml', # <-- khai bao thua ke qweb vua hien thuc
+        ],
+        #...
+    }
+    ```
+    Lúc này khi nhấn vào, không có gì xảy ra vì mình chưa hiện thực hành động cho nút nhấn mới này (trigger action).
+    - Button mới được thêm ở Qweb frontend, do đó, việc đính sự kiện vào button này sẽ được hiện thực ở Javascript.
+    - Button mới "Multi Update" có class là o_list_button_multi_update (tên này mình tự định nghĩa), nó sẽ liên kết với code javascript khai báo lắng nghe sự kiện click.
+    - Hành động thực thi sẽ là gọi đến backend phương thức btn_multi_update trong model my.pet, tham số truyền vào args là rỗng.
+    - Kết quả trả về từ backend sẽ được thực thi ở frontend với phương thức built-in do_action.
+    - > Note: hiện thực hàm **renderButtons()** của **web.ListController** mà ta sẽ thừa kế từ Odoo tại:
+    ```
+    odoo.define('mymodule.btn_tree_multi_update', function (require) {
+        "use strict";
+        var ListController = require('web.ListController');
+        
+        ListController.include({
+            renderButtons: function ($node) {
+                this._super.apply(this, arguments);            
+                if (!this.noLeaf && this.hasButtons) {
+                    this.$buttons.on('click', '.o_list_button_multi_update', this._onBtnMultiUpdate.bind(this)); // add event listener
+                }
+            },
+            _onBtnMultiUpdate: function (ev) {
+                // we prevent the event propagation because we don't want this event to
+                // trigger a click on the main bus, which would be then caught by the
+                // list editable renderer and would unselect the newly created row
+                if (ev) {
+                    ev.stopPropagation();
+                }
+                var self = this;
+                return this._rpc({
+                    model: 'my.module',
+                    method: 'btn_multi_update',
+                    args: [],
+                    context: this.initialState.context,
+                }).then(function(result) {
+                    // location.reload();
+                    self.do_action(result);
+                });
+            },
+        });
+    });
+    ```
