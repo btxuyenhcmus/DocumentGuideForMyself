@@ -66,3 +66,9 @@ After push commit, it will require new access token and save in global for the l
 ```
 $ git cherry-pick <id_commit>
 ```
+
+## Init a reponsitory in local
+```
+$ git init --bare
+```
+You can copy pwd of folder bare and clone to another folder
