@@ -91,3 +91,9 @@ Giải thích các thông số trong lệnh `ls -l`
     
 # Restore large database
  - Need up time cpu handle in config before restore
+
+# Docker ubuntu: sudo command not found
+ - enter the following command:
+```
+$ apt-get update && apt-get -y install sudo
+```
