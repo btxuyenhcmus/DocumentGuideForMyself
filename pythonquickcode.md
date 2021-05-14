@@ -204,3 +204,20 @@ arr = map(str, arr)
 >> print(dived_two)
 [0, 2, 4, 6, 8]
 ```
+
+24. **For Loop between map** `map faster`
+
+**Map:**
+
+    - Map is used to compute a function for different values ‘in a single line of code ‘ .
+    - It takes two arguments, first is function name, that is defined already and the other is list, tuple or any other iterables .
+    - It is a way of applying same function for multiple numbers .
+    - It generates a map object at a particular location .
+    - It works fast when we call an already defined function on the elements
+
+**For Loop:**
+
+    - We use for loop to repeat a block of code for fixed number of times .
+    - Used when no results are required .
+    - To perform sequential traversal .
+    - Loop from 0 to n runs n+1 times .
