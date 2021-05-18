@@ -36,3 +36,11 @@ You're probably already wondering if there's an easier way to run the server and
 7. Close the browser and stop the debugger when you're finished. To stop the debugger, use the Stop toolbar button (the red square) or the **Run > Stop Debugging** command (*Shift+F5*).
 
 8. You can now use the **Run > Start Debugging** at any time to test the app, which also has the benefit of automatically saving all modified files.
+
+# Odoo
+Cài đặt vscode để mở rộng extraPath
+```
+"python.analysis.extraPaths": [
+    "/home/btxuyen/soft/odoo"
+],
+```
