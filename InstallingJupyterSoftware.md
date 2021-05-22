@@ -44,3 +44,11 @@ If you use *pip3*, you can install it with:
 ```
 pip install voila
 ```
+
+# Installed jupyter extensions
+```
+pip3 install jupyter_contrib_nbextensions
+pip3 install jupyter_nbextensions_configurator
+jupyter contrib nbextension install --user
+jupyter nbextensions_configurator enable --user
+```
