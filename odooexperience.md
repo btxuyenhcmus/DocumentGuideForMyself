@@ -584,3 +584,8 @@
         });
     });
     ```
+
+39. Chạy bash shell để debug (docker)
+```
+docker exec -it <name_service> bash -c "odoo shell -c /etc/odoo/odoo.conf -d <db_name> --db_host <db_service> --db_password odoo -p <any_port>"
+```
