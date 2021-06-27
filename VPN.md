@@ -11,3 +11,25 @@
 8. Tạo file login.txt điền username, password thành 2 dòng.
 9. Sửa file `client.ovpn` vừa mới tải về, dòng 58 - login trỏ vào file login.txt
 10. Tải openvpn client về và import file vào là có thể sử dụng ngay.
+11. Tắt port ssh
+```
+$ sudo ufw enable
+...say yes if you sys warning
+```
+12. block ping response
+```
+$ sudo sysctl -w net.ipv4.icmp_echo_ignore_all=1
+```
+to open ping response
+```
+$ sudo sysctl -w net.ipv4.icmp_echo_ignore_all=0
+```
+13. Reopen ssh when your firewall disable 22 port (GCP)
+    - Go to google Console -> Compute Engine.
+    - Clickup to detail of instance and edit this.
+    - add "startup-script" in custom-metadata
+    ```
+    #! /bin/bash
+    ufw disable
+    ```
+    - reboot instance
