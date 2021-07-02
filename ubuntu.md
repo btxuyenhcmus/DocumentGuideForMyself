@@ -93,7 +93,18 @@ Giải thích các thông số trong lệnh `ls -l`
  - Need up time cpu handle in config before restore
 
 # Docker ubuntu: sudo command not found
- - enter the following command:
-```
-$ apt-get update && apt-get -y install sudo
-```
+- enter the following command:
+    ```
+    $ apt-get update && apt-get -y install sudo
+    ```
+
+# Remove a package and relationships
+- Step 1: list the name of package
+    ```
+    dpkg -l | grep <name>
+    ```
+
+- Step 2: Delete all the package that findout
+    ```
+    apt-get --purge remove <list of name>
+    ```
