@@ -221,3 +221,20 @@ arr = map(str, arr)
     - Used when no results are required .
     - To perform sequential traversal .
     - Loop from 0 to n runs n+1 times .
+
+25. Static attribute of class (not object):
+```
+class Singleton():
+    __instance = None
+
+    def __init__(self):
+        if Singleton.__instance:
+            raise Exception("This is singleton class")
+        Singleton.__instance = self
+    
+    @staticmethod
+    def getInstance():
+        if Singleton.__instance == None:
+            Singleton()
+        return Singleton.__instance
+```
