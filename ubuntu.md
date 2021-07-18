@@ -108,3 +108,8 @@ Giải thích các thông số trong lệnh `ls -l`
     ```
     apt-get --purge remove <list of name>
     ```
+
+# Block ping response
+```
+sudo sysctl -w net.ipv4.icmp_echo_ignore_all=1
+```
