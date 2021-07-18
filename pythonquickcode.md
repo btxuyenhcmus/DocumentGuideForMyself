@@ -238,3 +238,7 @@ class Singleton():
             Singleton()
         return Singleton.__instance
 ```
+
+26.`Globals` function
+
+globals() function in Python returns the dictionary of current global symbol table.
