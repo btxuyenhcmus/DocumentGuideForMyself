@@ -641,3 +641,7 @@
 ```
 docker exec -it <name_service> bash -c "odoo shell -c /etc/odoo/odoo.conf -d <db_name> --db_host <db_service> --db_password odoo -p <any_port>"
 ```
+
+41. Sự khác nhau dữa `write()` và `update()`:
+    - `write` là một trong các hàm của `CRUB`, chỉ thao tác với các dự liệu đã được lưu trong database.
+    - `update` là một hàm thay thế cho write đối với các `pseudo-record`, nghĩa là dự liệu không ẩn anh. (ví dụ như trong hàm `onchange`)
