@@ -674,3 +674,8 @@ docker exec -it <name_service> bash -c "odoo shell -c /etc/odoo/odoo.conf -d <db
             </xpath>
         </template>
     ```
+
+43. `models.Model, models.TransientModel, models.AbstractModel`
+    - `models.Model`: model được dùng để lưu trữ dữ liệu tĩnh và là loại chủ yếu trong python.
+    - `models.TransientModel`: model được dùng cho wizard.
+    - `models.AbstractModel`: Dùng để cho các model khác kế thừa và sử dụng các method, không dùng cho mục đích lưu dữ liệu.
