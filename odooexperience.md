@@ -643,5 +643,34 @@ docker exec -it <name_service> bash -c "odoo shell -c /etc/odoo/odoo.conf -d <db
 ```
 
 41. Sự khác nhau dữa `write()` và `update()`:
+
     - `write` là một trong các hàm của `CRUB`, chỉ thao tác với các dự liệu đã được lưu trong database.
     - `update` là một hàm thay thế cho write đối với các `pseudo-record`, nghĩa là dự liệu không ẩn anh. (ví dụ như trong hàm `onchange`)
+
+42. Kết hợp thay đổi title của Odoo
+
+    - Custom js để override `title_part`:
+
+    ```
+    var AbstractWebClient = require("web.AbstractWebClient");
+
+    AbstractWebClient = AbstractWebClient.include({
+        init: function (parent) {
+        this._super(parent);
+        this.set("title_part", { zopenerp: "BuyNgon" });
+        },
+    });
+    ```
+
+    - Custom xml để overide title khi chưa có sự can thiệp của js.
+
+    ```
+    <template id="layout" inherit_id="web.layout">
+            <xpath expr="//link[@rel='shortcut icon']" position="replace">
+                <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/felixbuy_module/static/src/img/favicon.ico'"/>
+            </xpath>
+            <xpath expr="//title" position="replace">
+                <title t-esc="title or 'BuyNgon'"/>
+            </xpath>
+        </template>
+    ```
