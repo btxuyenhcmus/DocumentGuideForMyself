@@ -284,3 +284,5 @@ https://example.com
 2. db_maxconn tăng lên 128.
 3. config nginx longpolling proxy vào port 8072.
    > Làm những điều này để tránh tình trạng sụp server
+4. Lỗi mixed content loaded http over https: vào odoo.conf để proxy_mode = True.
+   Chạy bằng docker phải làm như vậy
