@@ -1,3 +1,16 @@
+# User/Workspace Settings
+
+## User settings
+- Cài đặt chung cho vscode khi lauching với từng user.
+- Sẽ có 2 mode, mode GUI để cài đặt, mode editer để chỉnh sửa file json.
+- Hạn chế cài đặt cho user settings vì mỗi project sẽ có những yêu cầu khác nhau. chỉ nên cài đặt chung cho nhưng thuộc tính như theme, icon folder, CMD, extension các thưc,...
+- Với 1 developer thì nên dùng mode editer.
+
+## Workspace settings
+- Được lưu trữ trong thư mục ẩn `.vscode` của từng project giống như `.git` với tên file là `settings.json`.
+- Tùy theo từng ngôn ngữ mà mình setting default formatter khác nhau.
+- Tùy theo từng module mà mình setup đường dẫn truy vẫn các base module, custom module khác nhau.
+
 # Django
 
 ## Create a debugger launch profile
