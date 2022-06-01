@@ -44,3 +44,10 @@ Lúc này nó sẽ biến thành primary.
 ## Enable secondaryOk for all secondary
 
 1. `rs.secondaryOk()`
+
+# Avoid switch to SECONDARY from PRIMARY
+
+Trong quá trình phát triển, khó tránh khỏi chuyện up/down container liên tục. chúng ta cần tránh việc chuyển PRIMARY liên tục.
+
+
+Set `priority` của tất cả các Node SECONDARY trở về `0`.
