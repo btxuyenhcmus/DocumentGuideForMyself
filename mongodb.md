@@ -40,3 +40,7 @@ Lúc này nó sẽ biến thành primary.
 ## Add secondary to primary
 
 1. `>rs.add("host:port")`
+
+## Enable secondaryOk for all secondary
+
+1. `rs.secondaryOk()`
