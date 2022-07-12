@@ -676,6 +676,11 @@ docker exec -it <name_service> bash -c "odoo shell -c /etc/odoo/odoo.conf -d <db
     ```
 
 43. `models.Model, models.TransientModel, models.AbstractModel`
+
     - `models.Model`: model được dùng để lưu trữ dữ liệu tĩnh và là loại chủ yếu trong python.
     - `models.TransientModel`: model được dùng cho wizard.
     - `models.AbstractModel`: Dùng để cho các model khác kế thừa và sử dụng các method, không dùng cho mục đích lưu dữ liệu.
+
+44. Cách để có thể gắn `track_visibilit` cho model đã có sẵn:
+    - Tạo `class` mới có thuộc tính `_name` trùng tên.
+    - Thuộc tính `_inherit` sẽ kế thừa model cũ và mở rộng thêm các `AbsstractModel` đảm nhiệm chuyện log.

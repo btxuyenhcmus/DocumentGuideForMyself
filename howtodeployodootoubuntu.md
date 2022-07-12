@@ -285,4 +285,12 @@ https://example.com
 3. config nginx longpolling proxy vào port 8072.
    > Làm những điều này để tránh tình trạng sụp server
 4. Lỗi mixed content loaded http over https: vào odoo.conf để proxy_mode = True.
-   Chạy bằng docker phải làm như vậy
+   Chạy bằng docker phải làm như vậy.
+5. Nếu như bị lộ thông tin username password thì có thể đổi trực tiếp ở db và thêm environment vào odoo container
+   ```
+   environment:
+       - USER=<username>
+       - PASSWORD=<password>
+   ```
+   Còn bình thường thì nó sẽ lấy environment của db bỏ lên.
+   Và đặt biệt environment của db sẽ chỉ áp dụng cho lần đầu tiên.

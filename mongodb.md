@@ -89,3 +89,7 @@ Nếu có sử dụng authenticated thì cần phải sử dụng `*.keyFile`.
 6. up container secondary như primary.
 7. `rs.add("secondaryhost:port")`
 8. Change all secondary priority to 0 to avoid change primary while development.
+
+# Noted
+
+Nếu muốn kh chạy có repl Set nữa thì ở các secondary hay primary chỉ cần tắt command đi sẽ có thể trở thành một mongodb độc lập
