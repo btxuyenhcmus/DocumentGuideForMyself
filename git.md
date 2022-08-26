@@ -98,3 +98,8 @@ $ git init --bare
 ```
 
 You can copy pwd of folder bare and clone to another folder
+
+## Discard changes file
+```
+$ git checkout -- filename
+```
