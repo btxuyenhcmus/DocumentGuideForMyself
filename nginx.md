@@ -67,5 +67,6 @@ http {
 ## Split media file by ffmpeg converter
 
 ```
-ffmpeg -i demo.mp4 -profile:v baseline -level 3.0 -s 720x400 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls /path/to/videos/hls/demo.m3u8
+$ sudo apt install ffmpeg
+$ ffmpeg -i demo.mp4 -profile:v baseline -level 3.0 -s 720x400 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls /path/to/videos/hls/demo.m3u8
 ```
