@@ -154,3 +154,9 @@ sudo sysctl -w net.ipv4.icmp_echo_ignore_all=1
 - Step 3: Goto router setup, config Port Forwarding from external port to IP:Port
 
 Noted: If you have 2 router (Exp: Moderm VNPT -> Draytek Router -> Xiaomi Router. You must be config port forwarding from Draytek Router to IP of Xiaomi Router, after config port forwarding from Xiaomi Router to destination IP of server PC.
+
+# Setup virtual Server through VW ESXi
+- Step 1: using USD, Rufus and file iso of ESXi, process boot USB.
+- Step 2: boot from usb to server
+- Step 3: config DHCB or static IP to access control page of ESXi.
+- Step 4: Create new virtual server and load system iso that you want.
