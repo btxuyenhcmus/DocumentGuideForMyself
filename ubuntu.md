@@ -147,3 +147,10 @@ Giải thích các thông số trong lệnh `ls -l`
 ```
 sudo sysctl -w net.ipv4.icmp_echo_ignore_all=1
 ```
+
+# Public Webserver through Router Wifi
+- Step 1: Run service with host 0.0.0.0 and any port that you want. You must be run it by systemd.
+- Step 2: Check access port with internal IP
+- Step 3: Goto router setup, config Port Forwarding from external port to IP:Port
+
+Noted: If you have 2 router (Exp: Moderm VNPT -> Draytek Router -> Xiaomi Router. You must be config port forwarding from Draytek Router to IP of Xiaomi Router, after config port forwarding from Xiaomi Router to destination IP of server PC.
