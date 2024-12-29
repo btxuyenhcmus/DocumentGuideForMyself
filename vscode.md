@@ -1,12 +1,14 @@
 # User/Workspace Settings
 
 ## User settings
+
 - Cài đặt chung cho vscode khi lauching với từng user.
 - Sẽ có 2 mode, mode GUI để cài đặt, mode editer để chỉnh sửa file json.
 - Hạn chế cài đặt cho user settings vì mỗi project sẽ có những yêu cầu khác nhau. chỉ nên cài đặt chung cho nhưng thuộc tính như theme, icon folder, CMD, extension các thưc,...
 - Với 1 developer thì nên dùng mode editer.
 
 ## Workspace settings
+
 - Được lưu trữ trong thư mục ẩn `.vscode` của từng project giống như `.git` với tên file là `settings.json`.
 - Tùy theo từng ngôn ngữ mà mình setting default formatter khác nhau.
 - Tùy theo từng module mà mình setup đường dẫn truy vẫn các base module, custom module khác nhau.
@@ -62,4 +64,78 @@ Cài đặt vscode để mở rộng extraPath
 "python.analysis.extraPaths": [
     "/home/btxuyen/soft/odoo"
 ],
+```
+
+# Django + Gunicorn & Docker
+
+## Repairing
+
+1. Declare `debugpy==1.8.11` inside **requirements.txt**
+
+```
+# requirements.txt
+...
+# Development lib
+debugpy==1.8.11
+...
+```
+
+2. Expose port inside **Dockerfile**
+
+```
+# Dockerfile
+...
+WORKDIR /app
+...
+EXPOSE 5005 3000
+....
+CMD ["gunicorn", "--config", "gunicorn-cfg.py", "config.wsgi"]
+```
+
+3. Create `gunicorn-cfg.py` to save config for _gunicorn_
+
+Note: using on_starting hook of gunicorn to pre start debugpy
+
+```
+# gunicorn-cfg.py
+...
+import os
+import debugpy
+
+
+def on_starting(server):
+    # Bind debugpy to the external address and port 5678
+    debugpy.listen(("0.0.0.0", 3000))
+    print("Debugpy is listening on 0.0.0.0:3000")
+
+# Add this line to call the on_starting hook
+on_starting = on_starting
+```
+
+4. Expose debugpy port on docker compose
+
+```
+# docker-compose.yml
+...
+  - '3000:3000'
+...
+```
+
+5. Create launch file
+
+```
+{
+   "name": "Python: Attach docker",
+   "type": "python",
+   "request": "attach",
+   "pathMappings": [
+      {
+         "localRoot": "${workspaceFolder}",
+         "remoteRoot": "/app"
+      }
+   ],
+   "port": 3000,
+   "host": "0.0.0.0",
+   "justMyCode": true
+}
 ```
